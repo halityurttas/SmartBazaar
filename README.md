@@ -18,5 +18,6 @@ Shipment
 POS  
 Tax  
 Slider  
+And also a lot of modules/components
 
 #### !!!Fully html complete all admin area and front view!!!
