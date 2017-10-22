@@ -18,3 +18,5 @@ Shipment
 POS  
 Tax  
 Slider  
+
+#### !!!Fully html complete all admin area and front view!!!
