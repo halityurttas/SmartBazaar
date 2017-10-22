@@ -1,0 +1,85 @@
+﻿@model IEnumerable<SmartBazaar.Web.Areas.Admin.Models.FileListModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_SimpleLayout.cshtml";
+}
+<div class="page-content-wrapper">
+    <div class="page-content">
+        <table class="table table-bordered table-hover table-scrollable table-condensed dataTable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FileName)
+                    </th>
+                    <th style="width: 200px;">
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th style="width: 100px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <span class="label label-primary">
+                                <i class="fa fa-@Html.DisplayFor(modelItem => item.Icon)"></i>
+                            </span>&nbsp;
+                            <a href="javascript:select('@item.FileName')">@item.FileName</a>
+                        </td>
+                        <td style="width: 200px;">
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td style="width: 100px;">
+                            @Html.ActionLink("Sil", "Delete", new { file = item.FileName }, new { @class = "label label-danger", onclick = "return confirm('Dosya silinsin mi?')" })
+                            <a href="~/WebFiles/@item.FileName" target="_blank" class="label label-info">İndir/Bak</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+        @using (Html.BeginForm("Create", "FileManager", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="note note-success clearfix search">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3 col-md-3">Yüklenecek Dosya</label>
+                        <div class="col-sm-6 col-md-7">
+                            <input type="file" name="mainfile" class="form-control-stati" />
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <button type="submit" class="btn green-haze">
+                                <i class="fa fa-upload"></i> Yükle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section css {
+    <link href="~/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script src="~/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".dataTable").DataTable({
+                'iDisplayLength' : 5,
+                "bLengthChange": false,
+                "bInfo": false,
+                "bAutoWidth": false
+            });
+        });
+        
+        function select(filename) {
+            parent.setfilename(filename);
+        }
+    </script>
+}

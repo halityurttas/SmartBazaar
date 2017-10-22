@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>MainDB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{7c2ee5b5-45e4-4bc9-9883-7b8e05d6a273}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>MainDB</RootNamespace>
+    <AssemblyName>MainDB</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="Relations" />
+    <Folder Include="Views" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Catalog_Brands.sql" />
+    <Build Include="Tables\Catalog_Campaigns.sql" />
+    <Build Include="Tables\Catalog_Campaigns_Destinations.sql" />
+    <Build Include="Tables\Catalog_Campaigns_Sources.sql" />
+    <Build Include="Tables\Catalog_Categories.sql" />
+    <Build Include="Tables\Catalog_Products.sql" />
+    <Build Include="Tables\Customer_Addresses.sql" />
+    <Build Include="Tables\Customer_Entities.sql" />
+    <Build Include="Tables\Customer_Groups.sql" />
+    <Build Include="Tables\Order_Heads.sql" />
+    <Build Include="Tables\Order_Lines.sql" />
+    <Build Include="Tables\Pages.sql" />
+    <Build Include="Tables\Payment_Entities.sql" />
+    <Build Include="Tables\Payment_Installment.sql" />
+    <Build Include="Tables\Payment_Types.sql" />
+    <Build Include="Tables\Settings.sql" />
+    <Build Include="Tables\Shipment_Types.sql" />
+    <Build Include="Tables\Tax_Products.sql" />
+    <Build Include="Relations\CatalogCampaignsDestinationConstraint.sql" />
+    <Build Include="Relations\CatalogCampaignsDestinationsProductConstraint.sql" />
+    <Build Include="Relations\CatalogCampaignsOrderLinesConstraint.sql" />
+    <Build Include="Relations\CatalogCampaignsSourceProductConstraint.sql" />
+    <Build Include="Relations\CatalogCampaignsSourcesConstraint.sql" />
+    <Build Include="Relations\CustomerAddressConstraint.sql" />
+    <Build Include="Relations\CustomerGroupConstraint.sql" />
+    <Build Include="Relations\OrderCustomerConstraint.sql" />
+    <Build Include="Relations\OrderInvoiceAddressConstraint.sql" />
+    <Build Include="Relations\OrderLineProductConstraint.sql" />
+    <Build Include="Relations\OrderLinesConstraint.sql" />
+    <Build Include="Relations\OrderShipAddressConstraint.sql" />
+    <Build Include="Relations\PaymentEntityInstallmentConstraint.sql" />
+    <Build Include="Relations\PaymentEntityOrderConstraint.sql" />
+    <Build Include="Relations\PaymentEntityTypeConstraint.sql" />
+    <Build Include="Relations\PaymentInstallmentConstraint.sql" />
+    <Build Include="Relations\ProductBrandsConstraint.sql" />
+    <Build Include="Relations\ProductCategoryConstraint.sql" />
+    <Build Include="Relations\ProductTaxConstraint.sql" />
+    <Build Include="Tables\Catalog_Products_Properties.sql" />
+    <Build Include="Relations\ProductPropertiesConstraint.sql" />
+    <Build Include="Relations\OrderShipmentContraint.sql" />
+    <Build Include="Tables\Catalog_Product_Images.sql" />
+    <Build Include="Relations\ProductImagesConstraints.sql" />
+    <Build Include="Tables\HtmlBlocks.sql" />
+    <Build Include="Tables\Params_Groups.sql" />
+    <Build Include="Tables\Params.sql" />
+    <Build Include="Tables\Pos_Settings.sql" />
+    <Build Include="Tables\Slider.sql" />
+    <Build Include="Tables\Catalog_Product_Comments.sql" />
+    <Build Include="Tables\Catalog_Products_Relations.sql" />
+    <Build Include="Tables\Lang_Books.sql" />
+    <Build Include="Tables\Lang_Dictionary.sql" />
+    <Build Include="Tables\Catalog_Categories_Lang.sql" />
+    <Build Include="Tables\Catalog_Brands_Lang.sql" />
+    <Build Include="Tables\Catalog_Products_Lang.sql" />
+    <Build Include="Tables\Catalog_Products_Properties_Lang.sql" />
+    <Build Include="Tables\HtmlBlocks_Lang.sql" />
+    <Build Include="Tables\Pages_Lang.sql" />
+    <Build Include="Tables\Payment_Types_Lang.sql" />
+    <Build Include="Tables\Shipment_Types_Lang.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="MainDB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MainDB.publish.xml" />
+  </ItemGroup>
+</Project>

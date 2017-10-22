@@ -1,0 +1,61 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.SliderEditViewModel
+
+@{
+    ViewBag.Title = "Slider Ekle";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Yeni Slider Bilgileri";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Sliderlar</a>
+    </li>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+
+        @Html.EditorFor(model => model.Caption)
+        <div class="form-group">
+            @Html.LabelFor(model => model.ImageUrl, new { @class = "control-label col-sm-3 col-md-3 col-lg-2" })
+            <div class="col-md-4 col-sm-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.ImageUrl, new { @class = "form-control" })
+                    <div class="input-group-btn">
+                        <button type="button" id="ImgUrlChooseA" class="btn btn-info" data-toggle="modal" data-target="#mdlFileManager">...</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.EditorFor(model => model.Status)
+        @Html.EditorFor(model => model.Detail)
+
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}
+
+@section Subhtml {
+    @Html.Partial("Modals/FileManager")
+}
+
+@section css {
+    @Styles.Render("~/plugins/summernote-css")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/summernote-js")
+    
+    <script type="text/javascript">
+        function setfilename(filename) {
+            $("#ImageUrl").val(filename);
+            $("#mdlFileManager").modal("hide");
+        }
+
+        $(document).ready(function () {
+            $(".summernote").summernote({ height: 300 });
+        });
+    </script>
+}

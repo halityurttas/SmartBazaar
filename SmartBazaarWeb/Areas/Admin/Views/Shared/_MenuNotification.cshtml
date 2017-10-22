@@ -1,0 +1,37 @@
+﻿@model List<SmartBazaar.Web.Areas.Admin.Models.NotificViewModel>
+
+<li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+        <i class="icon-bell"></i>
+        <span class="badge badge-default">
+            @Model.Count
+        </span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="external">
+            <h3><span class="bold">@Model.Count bekleyen</span> sipariş</h3>
+        </li>
+        <li>
+            <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
+                @foreach (var item in Model)
+                {
+                <li>
+                    <a href="@Url.Action("Detail", "OrderManager", new { id = item.Id })">
+                        <span class="details">
+                            <span class="label label-sm label-icon @item.StatusCss">
+                                <i class="fa fa-shopping-cart"></i>
+                            </span>
+                            @item.Title - @item.OrderDate
+                        </span>
+                    </a>
+                </li>
+                }
+            </ul>
+        </li>
+        <li class="external">
+            <a href="@Url.Action("Index", "OrderManager")">
+               Tüm siparişler <i class="m-icon-swapright"></i>
+            </a>
+        </li>
+    </ul>
+</li>

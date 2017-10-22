@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SmartBazaar.Web.Models.Site.CustomerAddressViewModel>
+
+@{
+    ViewBag.Title = "Adreslerim";
+}
+
+<h2>@ViewBag.Title</h2>
+<div>
+    <a href="@Url.Action("AddAddress")" class="btn btn-success btn-sm">
+        <i class="fa fa-plus"></i> Yeni Adres
+    </a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+            <th style="width: 80px;">@Html.DisplayNameFor(model => model.Status)</th>
+            <th style="width: 100px;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@SmartBazaar.Web.Models.Internal.Statuses.GetTitle(item.Status)</td>
+                <td>
+                    <a href="@Url.Action("AddressEdit", new { id = item.Id })" class="btn btn-primary btn-sm">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <a href="@Url.Action("AddressDelete", new { id = item.Id })" class="btn btn-danger btn-sm">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.Partial("Paging")

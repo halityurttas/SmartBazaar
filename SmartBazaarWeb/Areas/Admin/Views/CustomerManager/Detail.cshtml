@@ -1,0 +1,179 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.CustomerEntityDetailViewModel
+
+@{
+    ViewBag.Title = "Müşteri Detayı";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = Model.Title;
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Müşteriler", "Index")
+    </li>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#tabMain" data-toggle="tab"><i class="fa fa-user"></i> Genel Bilgiler</a>
+                </li>
+                <li>
+                    <a href="#tabOrders" data-toggle="tab"><i class="fa fa-shopping-cart"></i> Siparişler</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tabMain">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="portlet blue-hoki box">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-user"></i> Temel Bilgiler
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">Ünvan</div>
+                                        <div class="col-sm-7 value">@Model.Title</div>
+                                    </div>
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">Firma</div>
+                                        <div class="col-sm-7 value">@Model.Company</div>
+                                    </div>
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">Doğum Tarihi</div>
+                                        <div class="col-sm-7 value">@string.Format("{0:d}", Model.BirthDate)</div>
+                                    </div>
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">Cinsiyet</div>
+                                        <div class="col-sm-7 value">@Model.GenderTitle</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portlet blue-hoki box">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-users"></i> Grup Bilgileri
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">Grup</div>
+                                        <div class="col-sm-7 value">@Model.GroupTitle</div>
+                                    </div>
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">Alış Fiyat Sıra</div>
+                                        <div class="col-sm-7 value">@(Model.PriceIndex). Fiyat</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portlet blue-hoki box">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-phone"></i> İletişim
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">Telefon</div>
+                                        <div class="col-sm-7 value">@Model.ContactPhone</div>
+                                    </div>
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">E-Posta</div>
+                                        <div class="col-sm-7 value"><a href="mailto:@(Model.Email)">@Model.Email</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portlet blue-hoki box">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-bank"></i> Vergi
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">Vergi/TCKimlik No</div>
+                                        <div class="col-sm-7 value">@Model.TaxNr</div>
+                                    </div>
+                                    <div class="row static-info">
+                                        <div class="col-sm-5 name">Vergi Dairesi</div>
+                                        <div class="col-sm-7 value">@Model.TaxOffice</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            @foreach (var addr in Model.Addresses)
+                            {
+                                <div class="portlet blue-hoki box">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-truck"></i> Adres
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="row static-info">
+                                            <div class="col-sm-5 name">Tanım</div>
+                                            <div class="col-sm-7 value">@addr.Title</div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-sm-5 name">İl</div>
+                                            <div class="col-sm-7 value">@addr.City</div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-sm-5 name">İlçe</div>
+                                            <div class="col-sm-7 value">@addr.District</div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-sm-5 name">Kasaba/Köy</div>
+                                            <div class="col-sm-7 value">@addr.Town</div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-sm-5 name">Posta Kodu</div>
+                                            <div class="col-sm-7 value">@addr.PostalCode</div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-sm-5 name">Detay</div>
+                                            <div class="col-sm-7 value">@addr.Detail</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="tabOrders">
+                    <h3>Son 10 Sipariş</h3>
+                    <table class="table">
+                        <tr>
+                            <th>Müşteri</th>
+                            <th style="width: 160px;">Sipariş Tarihi</th>
+                            <th style="width: 120px;">Toplam</th>
+                            <th style="width: 80px;">Durum</th>
+                            <th style="width: 40px; text-align: center;"></th>
+                        </tr>
+                        @foreach (var item in ViewData["Orders"] as List<SmartBazaar.Web.Areas.Admin.Models.OrderHeadsListViewModel>)
+                        {
+                            <tr>
+                                <td>@item.CustomerName</td>
+                                <td>@string.Format("{0:dd.MM.yyyy HH:mm}", item.OrderDate)</td>
+                                <td>@string.Format("{0:F2} TL", item.OrderTotal)</td>
+                                <td>
+                                    <label class="label @(SmartBazaar.Web.Models.Common.OrderHeadsListProvider.GetStatusCss()[item.Status])">@item.StatusTitle</label>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Detail", "OrderManager", new { id = item.Id})">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

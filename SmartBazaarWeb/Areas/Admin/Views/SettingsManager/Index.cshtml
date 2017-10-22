@@ -1,0 +1,34 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.SettingsEditViewModel
+
+@{
+    ViewBag.Title = "Ayarlar";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Yapılandırma Bilgileri";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="#">Tanımlar</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="#">Ayarlar</a>
+    </li>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.WorkingStockId)
+    @Html.HiddenFor(model => model.ShowUnstockItemId)
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.WorkingStock)
+        @Html.EditorFor(model => model.ShowUnstockItem)
+        @Html.EditorFor(model => model.PriceIncludeTax)
+        @Html.EditorFor(model => model.ShowComments)
+        @Html.EditorFor(model => model.UseFacebookComments)
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}
+

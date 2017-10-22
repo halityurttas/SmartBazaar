@@ -1,0 +1,37 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.ContactViewModel
+
+@{
+    ViewBag.Title = "Ayarlar";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "İletişim Bilgileri";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="#">Tanımlar</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="#">Ayarlar</a>
+    </li>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.Phone1Title)
+        @Html.EditorFor(model => model.Phone1)
+        @Html.EditorFor(model => model.Phone2Title)
+        @Html.EditorFor(model => model.Phone2)
+        @Html.EditorFor(model => model.Email1Title)
+        @Html.EditorFor(model => model.Email1)
+        @Html.EditorFor(model => model.Email2Title)
+        @Html.EditorFor(model => model.Email2)
+        @Html.EditorFor(model => model.Address)
+        @Html.EditorFor(model => model.GMapData)
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}

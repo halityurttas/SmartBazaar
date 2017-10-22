@@ -1,0 +1,14 @@
+﻿@model ModelStateDictionary
+
+@if (!Model.IsValid)
+{
+    <div class="note note-danger">
+        <h4 class="block">Lütfen aşağıda ki hataları kontrol edin!</h4>
+        <ul>
+            @foreach (var modelError in Model.SelectMany(keyValuePair => keyValuePair.Value.Errors))
+            {
+                <li>@modelError.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}

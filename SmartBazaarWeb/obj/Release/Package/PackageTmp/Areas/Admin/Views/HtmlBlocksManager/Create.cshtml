@@ -1,0 +1,39 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.HtmlBlocksEditViewModel
+
+@{
+    ViewBag.Title = "Bloklar";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Yeni Blok";
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Bloklar", "Index")
+    </li>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.Caption)
+        @Html.EditorFor(model => model.Location)
+        @Html.EditorFor(model => model.Status)
+        @Html.EditorFor(model => model.Detail)
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}
+
+@section css {
+    @Styles.Render("~/plugins/summernote-css")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/summernote-js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".summernote").summernote({ height: 300 });
+        });
+    </script>
+}

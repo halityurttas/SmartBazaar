@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="9c35226c-1d04-45e9-806e-fb5dcfa7027a" ChangeDateTime="08/30/2015 11:02:05">
+    <Property Name="ElementName" Value="[dbo].[Catalog_Products_Properties].[PropName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Catalog_Products_Properties]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Title" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1c997f9a-5fb2-4466-ab20-16eee23d67f5" ChangeDateTime="10/23/2015 12:19:24">
+    <Property Name="ElementName" Value="[dbo].[Catalog_Products].[EAN]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Catalog_Products]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Barcode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="511523b8-0b04-444b-90b7-5569b921a17e" ChangeDateTime="10/23/2015 12:27:22">
+    <Property Name="ElementName" Value="[dbo].[Catalog_Products].[MetaDescription]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Catalog_Products]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MetaUrl" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2b1873b5-ed18-4607-8e2b-c4f09f361f0d" ChangeDateTime="12/07/2015 13:11:02">
+    <Property Name="ElementName" Value="[dbo].[Pos_Cards].[Referance]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Pos_Cards]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SettingId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="962355b5-c473-4667-9332-082fa2cfdad6" ChangeDateTime="12/21/2015 11:49:42">
+    <Property Name="ElementName" Value="[dbo].[Catalog_Product_Comments].[Title]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Catalog_Product_Comments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Sender" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d003dc61-c129-4e1b-8b8f-768d3dc39962" ChangeDateTime="12/21/2015 11:50:29">
+    <Property Name="ElementName" Value="[dbo].[Catalog_Product_Comments].[Sender]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Catalog_Product_Comments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b13e318f-9b12-4ee4-b718-d5f352cb6716" ChangeDateTime="12/23/2015 08:28:28">
+    <Property Name="ElementName" Value="[dbo].[Catalog_Products_Relations].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Catalog_Products_Relations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GroupId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="26e781d2-edaf-4ffe-a609-e341e4f95025" ChangeDateTime="02/26/2016 12:46:53">
+    <Property Name="ElementName" Value="[dbo].[Seo_Settings].[Key]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Seo_Settings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Title" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2a53b7a1-eb6b-406f-81a3-1ecfa30f6dd0" ChangeDateTime="03/17/2016 09:24:30">
+    <Property Name="ElementName" Value="[dbo].[Lang_Dictionary].[bookId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Lang_Dictionary]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BookId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f85d15b1-9a39-475d-b726-f8d04191c64e" ChangeDateTime="03/17/2016 09:29:20">
+    <Property Name="ElementName" Value="[dbo].[Lang_Books].[code]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Lang_Books]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Code" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bca465c0-4dc9-4602-8f71-e3bbd010ccaf" ChangeDateTime="03/17/2016 09:29:26">
+    <Property Name="ElementName" Value="[dbo].[Lang_Books].[title]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Lang_Books]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Title" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="aed0f6ba-fcfd-490f-a857-3c9d8888effe" ChangeDateTime="03/17/2016 09:29:28">
+    <Property Name="ElementName" Value="[dbo].[Lang_Books].[status]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Lang_Books]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Status" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9500a8ba-ff28-4f22-b076-7929b9700015" ChangeDateTime="03/17/2016 09:29:36">
+    <Property Name="ElementName" Value="[dbo].[Catalog_Categories_Lang].[code]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Catalog_Categories_Lang]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Code" />
+  </Operation>
+</Operations>

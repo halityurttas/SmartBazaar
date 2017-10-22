@@ -1,0 +1,30 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.ShipmentTypesEditViewModel
+
+@{
+    ViewBag.Title = "Nakliye Yöntemi";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Nakliye Yöntemi";
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Nakliye Yöntemleri", "Index")
+    </li>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal">
+
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.Caption)
+        @Html.EditorFor(model => model.PricingMethod)
+        @Html.EditorFor(model => model.PricingValue)
+        @Html.EditorFor(model => model.Status)
+
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}
+

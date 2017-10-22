@@ -1,0 +1,12 @@
+﻿@{
+    string labelColumns = ViewBag.ColSizeLabel ?? "col-sm-3 col-md-3 col-lg-2";
+    string controlColumns = ViewBag.ColSizeShort ?? "col-md-4 col-sm-6";
+}
+
+<div class="form-group">
+    @Html.Label("", new { @class = "control-label " + labelColumns })
+    <div class="@controlColumns">
+        @Html.DropDownList("", ViewData[ViewData.ModelMetadata.PropertyName] as ICollection<SelectListItem>, new { @class = "form-control" })
+        @Html.ValidationMessage("", null, new { @class = "text-danger" })
+    </div>
+</div>

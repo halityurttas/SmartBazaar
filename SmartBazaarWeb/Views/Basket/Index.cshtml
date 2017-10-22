@@ -1,0 +1,141 @@
+﻿@model SmartBazaar.Web.Business.Layers.BasketLayer
+
+@{
+    ViewBag.Title = "Sepet";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-advance">
+            <thead>
+                <tr>
+                    <th style="width: 60px;"></th>
+                    <th>Ürün</th>
+                    <th class="text-center" style="width: 100px;">Fiyat</th>
+                    <th class="text-center" style="width: 160px;">Miktar</th>
+                    <th class="text-center" style="width: 140px;">Tutar</th>
+                    <th style="width: 80px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(w => w.RelatedId == null))
+                {
+
+                    <tr>
+                        <td><img src="~/WebFiles/@(item.ProductImage).ashx?width=60&height=40&mode=crop" /></td>
+                        <td>@item.ProductName<br /><small>@(item.CampaignId.HasValue ? "Kampanyalı" : "")</small></td>
+                        <td class="text-center">@string.Format("{0:F2} TL", item.Price)</td>
+                        <td class="text-center">
+                            <input type="text" id="item@(item.ProductId)" value="@item.Quantity" class="form-control spinner" />
+                        </td>
+                        <td class="text-center">@string.Format("{0:F2} TL", item.Total)<br /><small>@string.Format("{0:F2} TL + KDV", item.TotalPrice)</small></td>
+                        <td>
+                            <a href="javascript:UpdateQuantity(@item.ProductId)" class="badge badge-primary">
+                                <i class="fa fa-refresh"></i>
+                            </a>
+                            <a href="/Basket/RemoveProduct?id=@item.ProductId" class="badge badge-danger">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+                @foreach (var item in Model.Where(w => w.RelatedId == 0))
+                {
+                    <tr style="background-color: #FCF4BC; border-top: 2px solid #666;">
+                        <td><img src="~/WebFiles/@(item.ProductImage).ashx?width=60&height=40&mode=crop" /></td>
+                        <td>@item.ProductName<br /><small>@(item.CampaignId.HasValue ? "Kampanyalı" : "")</small></td>
+                        <td class="text-center">@string.Format("{0:F2} TL", item.Price)</td>
+                        <td class="text-center">
+                            <input type="text" id="relitem@(item.ProductId)" value="@item.Quantity" class="form-control spinner" />
+                        </td>
+                        <td class="text-center">@string.Format("{0:F2} TL", item.Total)<br /><small>@string.Format("{0:F2} TL + KDV", item.TotalPrice)</small></td>
+                        <td>
+                            <a href="javascript:UpdateRelQuantity(@item.ProductId)" class="badge badge-primary">
+                                <i class="fa fa-refresh"></i>
+                            </a>
+                            <a href="/Basket/RemoveRelProduct?id=@item.ProductId" class="badge badge-danger">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    var relitem = Model.FirstOrDefault(f => f.RelatedId == item.ProductId);
+                    <tr style="background-color: #FCF4BC; border-bottom: 2px solid #666;">
+                        <td><img src="~/WebFiles/@(relitem.ProductImage).ashx?width=60&height=40&mode=crop" /></td>
+                        <td>@relitem.ProductName<br /><small>@(relitem.CampaignId.HasValue ? "Kampanyalı" : "")</small></td>
+                        <td class="text-center">@string.Format("{0:F2} TL", relitem.Price)</td>
+                        <td class="text-center">
+                            @relitem.Quantity
+                        </td>
+                        <td class="text-center">@string.Format("{0:F2} TL", relitem.Total)<br /><small>@string.Format("{0:F2} TL + KDV", relitem.TotalPrice)</small></td>
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+
+
+
+
+
+
+
+        </table>
+    </div>
+</div>
+@{
+    SmartBazaar.Web.Models.Site.BasketSummaryViewModel summary = ViewBag.Summary;
+}
+<div class="row">
+    <div class="col-md-6" style="padding-top: 50px;">
+        <a href="@Url.Action("ClearBasket")" class="btn btn-lg btn-danger">
+            <i class="fa fa-trash"></i> Temizle
+        </a>
+        <a href="@Url.Action("Begin", "Order")" class="btn btn-lg btn-success">
+            <i class="fa fa-print"></i> Sipariş
+        </a>
+    </div>
+    <div class="col-md-offset-2 col-md-4">
+        <table class="table table-advance">
+            <tbody>
+                <tr>
+                    <th>Toplam:</th>
+                    <td class="text-right">@String.Format("{0:F2}", summary.BasketPriceTotal) TL</td>
+                </tr>
+                <tr>
+                    <th>KDV:</th>
+                    <td class="text-right">@String.Format("{0:F2}", summary.BasketTaxTotal) TL</td>
+                </tr>
+                <tr>
+                    <th>Genel:</th>
+                    <td class="text-right">@String.Format("{0:F2}", summary.BasketTotal) TL</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section css {
+    @Styles.Render("~/plugins/touchspin-css")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/touchspin-js")
+    <script type="text/javascript">
+        $(".spinner").TouchSpin({
+            min: 1,
+            max: 999,
+            verticalbuttons: true,
+            verticalupclass: 'fa fa-plus',
+            verticaldownclass: 'fa fa-minus'
+        });
+
+        function UpdateQuantity(id) {
+            var quantity = $("#item" + id).val();
+            document.location.href = "/Basket/UpdateQuantity?id=" + id + "&quantity=" + quantity;
+        }
+
+        function UpdateRelQuantity(id) {
+            var quantity = $("#relitem" + id).val();
+            document.location.href = "/Basket/UpdateRelQuantity?id=" + id + "&quantity=" + quantity;
+        }
+    </script>
+}

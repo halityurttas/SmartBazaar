@@ -1,0 +1,23 @@
+﻿@model List<SmartBazaar.Web.Models.Site.MenuViewModel>
+
+<ul id="main-menu" class="sf-menu">
+    @foreach (var item in Model)
+    {
+        <li>
+            <a href="@Url.Action("Index", "Product", new { id = item.Id.ToString() + "-" + item.Title })">@item.Title</a>
+            @foreach (var submenu in item.SubList)
+            {
+                @:@SubList(submenu)
+            }
+        </li>
+    }
+</ul>
+
+@helper SubList(SmartBazaar.Web.Models.Site.MenuViewModel item)
+{
+    <ul>
+        <li>
+            <a href="@Url.Action("Index", "Product", new { id = item.Id.ToString() + "-" + item.Title })">@item.Title</a>
+        </li>
+    </ul>
+}

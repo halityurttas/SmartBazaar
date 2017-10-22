@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Admin Panel">
+    <meta name="author" content="Halit Yurttas">
+    <title>@ViewBag.Title</title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=all" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/bundles/bootstrap-css")
+    @Styles.Render("~/metronic/global-css")
+    @RenderSection("pagecss", false)
+    @Styles.Render("~/bundles/fonts")
+    @Styles.Render("~/metronic/theme-css")
+    @RenderSection("css", false)
+</head>
+<body class="page-header-fixed page-quick-sidebar-over-content page-sidebar-closed page-sidebar-closed-hide-logo">
+
+    <div class="page-header navbar navbar-fixed-top">
+        <div class="page-header-inner">
+            <div class="page-logo">
+                <a href="index-2.html">
+                    <img src="~/assets/admin/layout/img/logo.png" alt="logo" class="logo-default" />
+                </a>
+                <div class="menu-toggler sidebar-toggler"></div>
+            </div>
+            
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+                    @Html.Action("Notific", "Manager")
+                    @Html.Partial("_MenuUser")
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="page-container">
+        <div class="page-sidebar-wrapper">
+            <div class="page-sidebar navbar-collapse">
+                <ul class="page-sidebar-menu page-sidebar-menu-closed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                    @Html.Partial("_LeftMenu")
+                </ul>
+            </div>
+        </div>
+        <div class="page-content-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap-js")
+    @Scripts.Render("~/metronic/global-js")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Metronic.init();
+            Layout.init();
+        });
+        $.validator.setDefaults({
+            ignore: [],
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element)
+                    .closest('.form-group').removeClass('has-error'); // set error class to the control group
+            },
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<SmartBazaar.Web.Areas.Admin.Models.CatalogCampaignsListViewModel>
+
+@{
+    ViewBag.Title = "Kampanyalar";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/ListLayout.cshtml";
+    ViewBag.CreateUrl = @Url.Action("Create");
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Kampanyalar", "Index")
+    </li>
+}
+@section Filters {
+    <div class="form-group col-sm-9">
+        <label class="control-label col-md-3 col-sm-4">Durum</label>
+        <div class="col-md-9 col-sm-8">
+            @Html.DropDownList("Status", null, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+    <tr>
+        <th style="width: 200px;">
+            @Html.DisplayNameFor(model => model.CampaignMethod)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th style="width: 120px;">
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th style="width: 110px;">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th style="width: 60px;">
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th style="width: 120px;"></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CampaignMethod)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td style="width: 80px;">
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td style="width: 120px;">
+            @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }, new { @class = "label label-primary" })
+            @Html.ActionLink("Sil", "Delete", new { id = item.Id }, new { @class = "label label-danger", onclick = "return confirm('Bu kampanya silinsin mi?')" })
+        </td>
+    </tr>
+}

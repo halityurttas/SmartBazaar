@@ -1,0 +1,451 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.CatalogProductEditViewModel
+@using SmartBazaar.Web.Areas.Admin.Models
+@{
+    ViewBag.Title = "Ürünler";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Yeni Ürün Bilgileri";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Ürünler</a>
+    </li>
+}
+
+@section PortletCaption {
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#tabMain" data-toggle="tab">Tanımlar</a>
+        </li>
+        <li>
+            <a href="#tabPreDetail" data-toggle="tab">Açıklamalar</a>
+        </li>
+        <li>
+            <a href="#tabDetail" data-toggle="tab">Detay</a>
+        </li>
+        <li>
+            <a href="#tabPrices" data-toggle="tab">Fiyat</a>
+        </li>
+        <li>
+            <a href="#tabFeatures" data-toggle="tab">Bilgiler</a>
+        </li>
+        <li>
+            <a href="#tabImages" data-toggle="tab">Resimler</a>
+        </li>
+        <li>
+            <a href="#tabProperties" data-toggle="tab">Özellikler</a>
+        </li>
+        <li>
+            <a href="#tabMetas" data-toggle="tab">SEO Bilgileri</a>
+        </li>
+        <li>
+            <a href="#tabRelated" data-toggle="tab">İlişkili Ürünler</a>
+        </li>
+    </ul>
+
+}
+
+@using (Html.BeginForm("Create", "CatalogManager", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <p>
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+    </p>
+
+    <div class="tab-content">
+        <div id="tabMain" class="tab-pane fade active in">
+            <div class="form-horizontal">
+                @Html.EditorFor(model => model.Caption)
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-sm-3 col-md-3 col-lg-2" })
+                    <div class="col-md-4 col-sm-6">
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.FakeCategoryId, new { @class = "form-control", disabled = "disabled" })
+                            @Html.HiddenFor(model => model.CategoryId, new { style = "display: none" })
+                            <div class="input-group-btn">
+                                <button type="button" id="ChoseParent" class="btn btn-info" data-toggle="modal" data-target="#ModalChoseParent">...</button>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                @Html.EditorFor(model => model.BrandId)
+                @Html.EditorFor(model => model.ProductCode)
+                @Html.EditorFor(model => model.Status)
+            </div>
+        </div>
+        <div id="tabPreDetail" class="tab-pane fade">
+            <div class="form-horizontal">
+                @Html.EditorFor(model => model.ShortDescription)
+                @Html.EditorFor(model => model.ManagerNotes)
+            </div>
+        </div>
+        <div id="tabDetail" class="tab-pane fade">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Description)
+                </div>
+            </div>
+        </div>
+        <div id="tabPrices" class="tab-pane fade">
+            <div class="form-horizontal">
+                @Html.EditorFor(model => model.Price1)
+                @Html.EditorFor(model => model.Price2)
+                @Html.EditorFor(model => model.Price3)
+                @Html.EditorFor(model => model.Price4)
+                @Html.EditorFor(model => model.Price5)
+            </div>
+        </div>
+        <div id="tabFeatures" class="tab-pane fade">
+            <div class="form-horizontal">
+                @Html.EditorFor(model => model.Stock)
+                @Html.EditorFor(model => model.MaxInstallment)
+                @Html.EditorFor(model => model.TaxGroup)
+                @Html.EditorFor(model => model.SearchText)
+                @Html.EditorFor(model => model.IsHomepage)
+                @Html.EditorFor(model => model.IsFeatured)
+                @Html.EditorFor(model => model.IsNew)
+                @Html.EditorFor(model => model.SKU)
+                @Html.EditorFor(model => model.MNP)
+                @Html.EditorFor(model => model.Barcode)
+                @Html.EditorFor(model => model.IsBuyable)
+                @Html.EditorFor(model => model.IsShipable)
+                @Html.EditorFor(model => model.Tare)
+                @Html.EditorFor(model => model.ExternalRef1)
+                @Html.EditorFor(model => model.ExternalRef2)
+                @Html.EditorFor(model => model.ExternalRef3)
+            </div>
+        </div>
+        <div id="tabImages" class="tab-pane fade">
+            <div class="col-sm-12 form-horizontal" id="divImages">
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ImageUrl, new { @class = "control-label col-sm-3 col-md-3 col-lg-2" })
+                        <div class="col-md-4 col-sm-6">
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.ImageUrl, new { @class = "form-control" })
+                                <div class="input-group-btn">
+                                    <button type="button" id="ImgUrlChooseA" class="btn btn-info" data-toggle="modal" data-target="#mdlFileManager">...</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row" data-bind="foreach: ImgList">
+                        <div class="col-sm-3">
+                            <div class="panel panel-default">
+                                <div class="panel-heading text-right">
+                                    <button class="btn btn-sm btn-warning" data-bind="click: function (data, event) { $parent.RemoveImage($index()) }">Sil</button>
+                                </div>
+                                <div class="panel-body form-horizontal">
+                                    <img class="img-responsive" data-bind="attr: { src: '/WebFiles/' + ImageUrl }" />
+                                    <div class="form-group form-group-sm">
+                                        <label class="col-sm-4 control-label">Sıra:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" data-bind="value: Sort, attr: { name: 'Images[' + $index() + '].Sort'}" />
+                                        </div>
+                                    </div>
+                                    <input type="hidden" data-bind="value: ImageUrl, attr: { name: 'Images[' + $index() + '].ImageUrl' }" />
+                                    <input type="hidden" data-bind="value: Id, attr: { name: 'Images[' + $index() + '].Id' }" />
+                                    <input type="hidden" data-bind="value: ProductId, attr: { name: 'Images[' + $index() + '].ProductId' }" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Ek Resim:</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" id="CurrentImage" data-bind="value: CurrentImage" class="form-control" />
+                                    <div class="input-group-btn">
+                                        <button type="button" id="ImgUrlChooseB" class="btn btn-info" data-toggle="modal" data-target="#mdlFileManager">...</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="control-label col-sm-2">Sıra:</label>
+                            <div class="col-sm-2">
+                                <input type="text" data-bind="value: CurrentSort" class="form-control" />
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="btn btn-primary" data-bind="click: function(data, item) { AppendImage(); }">Ekle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="tabProperties" class="tab-pane fade">
+            <div class="col-sm-12" id="divProps">
+                <table class="table table-bordered table-advance">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%">Özellik</th>
+                            <th style="width: 40%">Değeri</th>
+                            <th style="width: 10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: PropList">
+                        <tr>
+                            <td data-bind="text: Title"></td>
+                            <td data-bind="text: Value"></td>
+                            <td>
+                                <a href="#" data-bind="click: function (data, event) { $parent.RemoveProp($index()) }" class="badge badge-danger">Sil</a>
+                                <input type="hidden" data-bind="value: Title, attr: { name: 'Properties[' + $index() + '].Title'}" />
+                                <input type="hidden" data-bind="value: Value, attr: { name: 'Properties[' + $index() + '].Value'}" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-bordered table-advance">
+                    <tbody>
+                        <tr>
+                            <th style="width: 40%">
+                                <input type="text" class="form-control" data-bind="value: CurrentTitle" />
+                            </th>
+                            <th style="width: 40%">
+                                <input type="text" class="form-control" data-bind="value: CurrentValue" />
+                            </th>
+                            <th style="width: 10%">
+                                <button class="btn btn-primary" data-bind="click: function (data, event)  { AppendProp(); }">Ekle</button>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="tabRelated" class="tab-pane fade">
+            <div class="col-sm-12" id="divRels">
+                <ul class="list-group">
+                    <!-- ko foreach: ProdList-->
+                    <li>
+                        <span data-bind="text: Title"></span>
+                        <a href="#" data-bind="click: function (data, event) { $parent.RemoveItem($index()) }" class="badge badge-danger">Sil</a>
+                        <input type="hidden" data-bind="value: Id, attr: { name: 'Relations[' + $index() + '].ProductId' }" />
+                    </li>
+                    <!-- /ko-->
+                </ul>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <button type="button" id="btnAddRel" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> Yeni Ürün Ekle
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="tabMetas" class="tab-pane fade">
+            <div class="form-horizontal">
+                @Html.EditorFor(model => model.MetaTitle)
+                @Html.EditorFor(model => model.MetaKeywords)
+                @Html.EditorFor(model => model.MetaDescription)
+                @Html.EditorFor(model => model.MetaUrl)
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well">
+                <button class="btn btn-success">
+                    <i class="fa fa-save"></i> Kaydet
+                </button>
+            </div>
+        </div>
+</div>
+}
+
+@section Subhtml {
+    <div class="modal fade" id="ModalChoseParent" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Kategori Seçin</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="categoryTree">
+                        <ul>
+                            @foreach (var item in (ViewData["CategoryTree"] as CatalogCategoryTreeModel).Items)
+                            {
+                                <li data-id="@item.Id" data-title="@item.Title" data-level="@item.Level">
+                                    @item.Title
+                                    @SubCat(item)
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn green-haze" id="CategorySet">Seç</button>
+                    <button type="button" class="btn default" data-dismiss="modal">İptal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("Modals/FileManager")
+    @Html.Partial("Modals/ProductSelector")
+}
+
+@helper SubCat(CatalogCategoryTreeItemModel item)
+{
+if (item.Items.Count > 0)
+{
+        <ul>
+            @foreach (var subitem in item.Items)
+            {
+                <li data-id="@subitem.Id" data-title="@subitem.Title" data-level="@subitem.Level">
+                    @subitem.Title
+                    @SubCat(subitem)
+                </li>
+            }
+        </ul>
+}
+}
+@section css {
+    @Styles.Render("~/plugins/jstree-css")
+    @Styles.Render("~/plugins/summernote-css")
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/plugins/jstree-js")
+    @Scripts.Render("~/plugins/summernote-js")
+
+    <script type="text/javascript">
+        $.validator.setDefaults({
+            ignore: [],
+            // any other default options and/or rules
+        });
+
+        var fakeParentId = "";
+        var parentId = "";
+        var imageTarget = "";
+
+        $(document).ready(function () {
+            $("#CategoryId").val("");
+
+            $("#categoryTree").on('changed.jstree', function (e, data) {
+                var item = $("#" + data.selected);
+                fakeParentId = $(item).attr("data-title");
+                parentId = $(item).attr("data-id");
+            }).jstree();
+            $("#CategorySet").click(function () {
+                $("#FakeCategoryId").val(fakeParentId);
+                $("#CategoryId").val(parentId);
+                $("#ModalChoseParent").modal('hide');
+            });
+            $("#ImgUrlChooseB").click(function () {
+                imageTarget = "CurrentImage";
+            });
+            $("#ImgUrlChooseA").click(function () {
+                imageTarget = "ImageUrl";
+            });
+            $(".summernote").summernote({ height: 300 });
+            appProps.init();
+            appImgs.init();
+            appRels.init();
+        });
+
+        function setfilename(filename) {
+            if (imageTarget == "CurrentImage") {
+                appImgs.setImage(filename);
+            } else {
+                $("#ImageUrl").val(filename);
+            }
+            $("#mdlFileManager").modal("hide");
+        }
+
+        var appProps = function () {
+            var self = this;
+            self.CurrentTitle = ko.observable('');
+            self.CurrentValue = ko.observable('');
+            self.PropList = ko.observableArray(@Html.Raw(ViewBag.PropList));
+            self.AppendProp = function () {
+                if (self.CurrentTitle() == "" || self.CurrentValue() == "") return;
+                PropList.push({
+                    Id: 0,
+                    ProductId: 0,
+                    Title: self.CurrentTitle(),
+                    Value: self.CurrentValue()
+                });
+                self.CurrentTitle('');
+                self.CurrentValue('');
+            }
+            self.RemoveProp = function (ind) {
+                self.PropList.splice(ind, 1);
+            }
+            return {
+                init: function () {
+                    ko.applyBindings(self, document.getElementById('divProps'));
+                }
+            }
+        }();
+
+        var appRels = function () {
+            var self = this;
+            self.ProdList = ko.observableArray(@Html.Raw(ViewBag.Relations));
+            self.AppendItem = function (id, title) {
+                if (self.ProdList.indexOf({
+                    Id: id,
+                    Title: title
+                }) >= 0) return;
+                self.ProdList.push({
+                    Id: id,
+                    Title: title
+                });
+            }
+            self.RemoveItem = function (ind) {
+                self.ProdList.splice(ind, 1);
+            }
+            $("#btnAddRel").click(function () {
+                $("#mdlProducts").modal("show");
+                window.selectorApi = appRels;
+            });
+            return {
+                init: function () {
+                    ko.applyBindings(self, document.getElementById('divRels'));
+                },
+                add: function (id, text) {
+                    self.AppendItem(id, text);
+                }
+            }
+        }();
+
+        var appImgs = function () {
+            var self = this;
+            self.ImgList = ko.observableArray(@Html.Raw(ViewBag.ImgList));
+            self.CurrentSort = ko.observable(self.ImgList().length + 1);
+            self.CurrentImage = ko.observable('');
+            self.AppendImage = function () {
+                if (self.CurrentImage() == "" || self.CurrentSort() == "") return;
+                self.ImgList.push({
+                    Id: 0,
+                    ProductId: 0,
+                    Sort: self.CurrentSort(),
+                    ImageUrl: self.CurrentImage()
+                });
+                self.CurrentSort(self.ImgList().length + 1);
+                self.CurrentImage('');
+            }
+            self.RemoveImage = function (ind) {
+                self.ImgList.splice(ind, 1);
+            }
+            return {
+                init: function () {
+                    ko.applyBindings(self, document.getElementById('divImages'));
+                },
+                setImage: function (url) {
+                    self.CurrentImage(url);
+                }
+            }
+        }();
+    </script>
+
+    <script type="text/javascript" src="~/Scripts/app/appProductSelector.js"></script>
+}

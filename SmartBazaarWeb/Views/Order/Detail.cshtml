@@ -1,0 +1,152 @@
+﻿@model SmartBazaar.Web.Models.Site.OrderHeaderDetailViewModel
+@using SmartBazaar.Web.Models.Common
+@{
+    ViewBag.Title = "Sipariş Detayı";
+}
+
+<h2>Sipariş #@Model.Id.ToString("00000000")</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Sipariş Bilgileri
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>Sipariş No</dt>
+                    <dd>@Model.Id.ToString("00000000")</dd>
+                    <dt>Tarih - Saat</dt>
+                    <dd>@string.Format("{0:dd.MM.yyyy HH:mm}", Model.OrderDate)</dd>
+                    <dt>Durum</dt>
+                    <dd>@Model.StatusText</dd>
+                    <dt>Tutar</dt>
+                    <dd>@string.Format("{0:F2} TL", Model.GrandTotal)</dd>
+                    <dt>Nakliye</dt>
+                    <dd>@Model.Shipment.Title</dd>
+                    <dt>Ödeme Şekli</dt>
+                    <dd>
+                        @if (Model.PaymentTypes.Any())
+                        {
+                            @Model.PaymentTypes.FirstOrDefault().Title
+                            @(Model.PaymentTypes.FirstOrDefault().Installments.Any() ? string.Format(" ({0})", Model.PaymentTypes.FirstOrDefault().Installments.FirstOrDefault().NumberOf) : "")
+                        }
+                    </dd>
+                    <dt>Ödeme Durumu</dt>
+                    <dd>
+                        @if (Model.PaymentEntities.Any())
+                        {
+                            @PaymentEntitiesListsProvider.GetStatuses()[Model.PaymentEntities.FirstOrDefault().Status]
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Teslimat Adresi
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>Tanım</dt>
+                    <dd>@Model.ShipmentAddress.Title</dd>
+                    <dt>İl</dt>
+                    <dd>@Model.ShipmentAddress.City</dd>
+                    <dt>İlçe</dt>
+                    <dd>@Model.ShipmentAddress.District</dd>
+                    <dt>Kasaba/Köy</dt>
+                    <dd>@Model.ShipmentAddress.Town</dd>
+                    <dt>Posta Kodu</dt>
+                    <dd>@Model.ShipmentAddress.PostalCode</dd>
+                    <dt>Detay</dt>
+                    <dd>@Model.ShipmentAddress.Detail</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Fatura Adresi
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>Tanım</dt>
+                    <dd>@Model.InvoiceAddress.Title</dd>
+                    <dt>İl</dt>
+                    <dd>@Model.InvoiceAddress.City</dd>
+                    <dt>İlçe</dt>
+                    <dd>@Model.InvoiceAddress.District</dd>
+                    <dt>Kasaba/Köy</dt>
+                    <dd>@Model.InvoiceAddress.Town</dd>
+                    <dt>Posta Kodu</dt>
+                    <dd>@Model.InvoiceAddress.PostalCode</dd>
+                    <dt>Detay</dt>
+                    <dd>@Model.InvoiceAddress.Detail</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Ürünler
+            </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Ürün</th>
+                            <th>Fiyat</th>
+                            <th>Miktar</th>
+                            <th>Vergi</th>
+                            <th>Toplam</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Lines)
+                        {
+                            <tr>
+                                <td>
+                                    <img src="~/WebFiles/@(item.ProductImage).ashx?width=60&height=60&mode=crop" />
+                                </td>
+                                <td>@item.ProductName @(item.CampaignId.HasValue ? "<br /><small>Kampanyalı</small>" : "")</td>
+                                <td style="text-align: right;">@string.Format("{0:F2} TL", item.Price)</td>
+                                <td>@item.Quantity</td>
+                                <td style="text-align: right;">@string.Format("{0:F2} TL", item.Tax)</td>
+                                <td style="text-align: right;">@string.Format("{0:F2} TL", item.Total) <br /><small>(@string.Format("{0:F2} TL", item.TotalPrice) + KDV)</small></td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="well">
+            @if (Model.Status == 0)
+            {
+                <a class="btn btn-danger" href="@Url.Action("Cancel", new { id = Model.Id })" onclick="return confirm('İptal etmek istediğinizden emin misiniz?')">
+                    Siparişi İptal Et
+                </a>
+            }
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="well">
+            <dl class="dl-horizontal">
+                <dt>Toplam</dt>
+                <dd style="text-align: right">@string.Format("{0:F2} TL", Model.OrderTotal)</dd>
+                <dt>Nakliye Bedeli</dt>
+                <dd style="text-align: right">@string.Format("{0:F2} TL", Model.ShipCost)</dd>
+                <dt>Tahsilat Masrafları</dt>
+                <dd style="text-align: right">@string.Format("{0:F2} TL", Model.PaymentFee)</dd>
+                <dt>KDV</dt>
+                <dd style="text-align: right">@string.Format("{0:F2} TL", Model.TaxTotal)</dd>
+                <dt>Genel Toplam</dt>
+                <dd style="text-align: right">@string.Format("{0:F2} TL", Model.GrandTotal)</dd>
+            </dl>
+        </div>
+    </div>
+</div>

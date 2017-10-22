@@ -1,0 +1,213 @@
+﻿@using SmartBazaar.Web.Models.Site
+
+@model OrderHeaderProcessModel
+
+@{
+    ViewBag.Title = "Sipariş";
+}
+@using (Html.BeginForm("Checkout", "Order", FormMethod.Post)) 
+{
+    @Html.AntiForgeryToken() 
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-advance">
+            <thead>
+                <tr>
+                    <th style="width: 60px;"></th>
+                    <th>Ürün</th>
+                    <th class="text-center" style="width: 100px;">Fiyat</th>
+                    <th class="text-center" style="width: 160px;">Miktar</th>
+                    <th class="text-center" style="width: 140px;">Tutar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var line in Model.Lines)
+                {
+                    <tr>
+                        <td><img src="~/WebFiles/@(line.ProductImage).ashx?width=60&height=40&mode=crop" /></td>
+                        <td><a href="@Url.Action("Detail", "Product", new { id = line.ProductId })">@line.ProductName</a><br /><small>@(line.CampaignId.HasValue ? "Kampanyalı" : "")</small></td>
+                        <td class="text-center">@string.Format("{0:F2} TL", line.Price)</td>
+                        <td class="text-center">@line.Quantity</td>
+                        <td class="text-center">@string.Format("{0:F2} TL", line.Total)<br /><small>@string.Format("{0:F2} TL + KDV", line.TotalPrice)</small></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-offset-8 col-md-4">
+        <table class="table table-advance">
+            <tbody>
+                <tr>
+                    <th>Toplam:</th>
+                    <td class="text-right">@String.Format("{0:F2}", Model.OrderTotal) TL</td>
+                </tr>
+                <tr>
+                    <th>KDV:</th>
+                    <td class="text-right">@String.Format("{0:F2}", Model.TaxTotal) TL</td>
+                </tr>
+                <tr>
+                    <th>Genel:</th>
+                    <td class="text-right">@String.Format("{0:F2}", Model.GrandTotal) TL</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <div class="form">
+            <div class="form-group">
+                <label class="control-label col-md-3">Sipariş Notunuz</label>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form">
+            <div class="form-group">
+                <textarea class="form-control" rows="5" name="Note"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-md-3">Teslimat Adresi</label>
+                <div class="col-md-9">
+                    @Html.DropDownList("AddressId", Model.Addresses.Select(s => new SelectListItem { Text = s.Title, Value = s.Id.ToString() }).ToList(), new { @class = "form-control"})
+                </div>
+            </div>
+            <div id="InvoiceAddressHolder" class="form-group" style="display: none;">
+                <label class="control-label col-md-3">Fatura Adresi</label>
+                <div class="col-md-9">
+                    @Html.DropDownList("InvoiceAddressId", Model.Addresses.Select(s => new SelectListItem { Text = s.Title, Value = s.Id.ToString() }).ToList(), new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-5">
+                    <input type="checkbox" name="InvoiceSendPartial" id="InvoiceSendPartial" value="yes" /> Fatura farklı bir adrese gönderilsin
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#modalAddress">
+                        <i class="fa fa-plus-square-o"></i> Yeni Adres Ekle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-md-3">Teslimat Yöntemi</label>
+                <div class="col-md-9">
+                    <ul class="list-group">
+                        @{
+                            bool firstShip = true;
+                        }
+                        @foreach (var ship in Model.Shipments)
+                        {
+                            <li class="list-group-item">
+                                <input type="radio" name="ShipmentType" value="@ship.Id" @(firstShip ? "checked=\"checked\"" : "") /> @ship.Title
+                                <span class="badge">@string.Format("{0:F2} TL", ship.Price)</span>
+                            </li>
+                            firstShip = false;
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-success btn-lg pull-right">
+            <i class="fa fa-credit-card"></i> Ödeme İşlemleri
+        </button>
+    </div>
+</div>
+}
+<div class="modal fade" id="modalAddress">
+    <div class="modal-dialog">
+        <div class="modal-content">
+@using (Html.BeginForm("AddAddress", "Order", FormMethod.Post, new { @class = "form form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Yeni Adres</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-sm-3">Tanım</label>
+                    <div class="col-sm-9">
+                        @Html.TextBox("AddressTitle", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-sm-3">İl</label>
+                    <div class="col-sm-9">
+                        @Html.DropDownList("AddressCity", ViewBag.Cities as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-sm-3">İlçe</label>
+                    <div class="col-sm-9">
+                        @Html.DropDownList("AddressDistrict", ViewBag.Districts as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-sm-3">Kasaba/Köy</label>
+                    <div class="col-sm-9">
+                        @Html.TextBox("AddressTown", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-sm-3">Posta Kodu</label>
+                    <div class="col-sm-9">
+                        @Html.TextBox("AddressPostalCode", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-sm-3">Detay</label>
+                    <div class="col-sm-9">
+                        @Html.TextArea("AddressDetail", null, new { @class = "form-control", rows = 3 })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">İptal</button>
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+            </div>
+}
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#AddressCity").change(function () {
+            $.ajax({
+                url: "/Order/GetDistricts",
+                method: "GET",
+                data: { CityId: $("#AddressCity").val() }
+            }).success(function (data) {
+                $("#AddressDistrict").html("");
+                $.each(data, function (idx, item) {
+                    console.log(item);
+                    $("#AddressDistrict").append("<option>" + item.Text + "</option>");
+                });
+            });
+        });
+        $("#InvoiceSendPartial").change(function () {
+            $("#InvoiceAddressHolder").toggle(this.checked);
+        });
+    </script>
+}

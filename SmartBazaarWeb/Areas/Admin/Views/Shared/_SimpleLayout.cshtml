@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Admin Panel">
+    <meta name="author" content="Halit Yurttas">
+    <title>@ViewBag.Title</title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=all" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/bundles/bootstrap-css")
+    @Styles.Render("~/metronic/global-css")
+    @RenderSection("pagecss", false)
+    @Styles.Render("~/bundles/fonts")
+    @Styles.Render("~/metronic/theme-css")
+    @RenderSection("css", false)
+</head>
+<body class="page-full-width">
+    @RenderBody()
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap-js")
+    @Scripts.Render("~/metronic/global-js")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Metronic.init();
+            Layout.init();
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

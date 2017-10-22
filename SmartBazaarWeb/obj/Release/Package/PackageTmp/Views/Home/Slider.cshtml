@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SmartBazaar.Web.Models.Site.CampaignSliderViewModel>
+
+<div id="campaign-carousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        @{ bool indfirst = true; }
+        @foreach (var item in Model)
+        {
+            <li data-target="#campaign-carousel" data-slide-to="0" class="@(indfirst ? "active" : "")"></li>
+            indfirst = false;
+        }
+    </ol>
+
+
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        @{ bool carfirst = true; }
+        @foreach (var item in Model)
+        {
+            <div class="item @(carfirst ? "active" : "")">
+                <a href="@Url.Action("Detail", "Campaign", new { id = item.Id })">
+                    <img src="~/WebFiles/@(item.SliderUrl).ashx?width=900&height=400&mode=crop">
+                </a>
+                <div class="carousel-caption">
+                    @item.Title
+                </div>
+            </div>
+            carfirst = false;
+        }
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#campaign-carousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Önceki</span>
+    </a>
+    <a class="right carousel-control" href="#campaign-carousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Sonraki</span>
+    </a>
+</div>

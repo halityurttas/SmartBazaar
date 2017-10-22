@@ -1,0 +1,10 @@
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\bin\Debug\SmartBazaar.Data.dll.config
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\bin\Debug\SmartBazaar.Data.dll
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\bin\Debug\SmartBazaar.Data.pdb
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\bin\Debug\EntityFramework.dll
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\bin\Debug\EntityFramework.SqlServer.dll
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\bin\Debug\EntityFramework.xml
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\bin\Debug\EntityFramework.SqlServer.xml
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\obj\Debug\SmartBazaar.Data.csprojResolveAssemblyReference.cache
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\obj\Debug\SmartBazaar.Data.dll
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\SmartBazaar.Data\obj\Debug\SmartBazaar.Data.pdb

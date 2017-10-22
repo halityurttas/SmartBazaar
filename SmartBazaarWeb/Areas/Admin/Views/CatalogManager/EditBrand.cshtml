@@ -1,0 +1,35 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.CatalogBrandEditViewModel
+
+@{
+    ViewBag.Title = "Markalar";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Marka Bilgileri";
+}
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Ürünler</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        @Html.ActionLink("Markalar", "Brands")
+    </li>
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-horizontal">
+
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.Caption)
+        @Html.EditorFor(model => model.Status)
+        @Html.EditorFor(model => model.ExternalRef1)
+        @Html.EditorFor(model => model.ExternalRef2)
+        @Html.EditorFor(model => model.ExternalRef3)
+
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}

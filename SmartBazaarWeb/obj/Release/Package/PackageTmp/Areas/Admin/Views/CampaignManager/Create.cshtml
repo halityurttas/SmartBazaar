@@ -1,0 +1,232 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.CatalogCampaignsEditViewModel
+
+@{
+    ViewBag.Title = "Kampanyalar";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Yeni Kampanya Bilgileri";
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Kampanyalar", "Index")
+    </li>
+}
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.CampaignMethod)
+        @Html.EditorFor(model => model.Caption)
+        @Html.EditorFor(model => model.Description)
+        @Html.EditorFor(model => model.StartDate)
+        @Html.EditorFor(model => model.EndDate)
+        @Html.EditorFor(model => model.DiscountMethod)
+        @Html.EditorFor(model => model.DiscountValue)
+        @Html.EditorFor(model => model.MaxUsage)
+        <div class="form-group">
+            @Html.LabelFor(model => model.SlideUrl, new { @class = "control-label col-sm-3 col-md-3 col-lg-2" })
+            <div class="col-md-4 col-sm-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.SlideUrl, new { @class = "form-control" })
+                    <div class="input-group-btn">
+                        <button type="button" id="ImgUrlChooseA" class="btn btn-info" data-toggle="modal" data-target="#mdlFileManager">...</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.EditorFor(model => model.Status)
+
+        <h4>Kampanya Ürünleri</h4>
+        <hr />
+        <div class="form-group">
+            <label class="control-label col-sm-3 col-md-3 col-lg-2">Kaynak Ürünler</label>
+            <div class="col-md-8 col-sm-8">
+                <ul class="list-group" id="sourcelist">
+                    <!-- ko foreach: SourceList-->
+                    <li class="list-group-item">
+                        <input type="hidden" data-bind="value: Id, attr: { name: 'Sources[' + $index() + '].ProductId' }" />
+                        <input type="hidden" data-bind="value: Text, attr: { name: 'Sources[' + $index() + '].ProductName' }" />
+                        <span data-bind="text: Text"></span>
+                        <a href="#" data-bind="click: function (data, event) { $parent.RemoveSource(Id) }" class="badge badge-danger">Sil</a>
+                    </li>
+                    <!-- /ko-->
+                </ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-2 col-md-8 col-sm-8">
+                <button type="button" id="btnAddSource" class="btn btn-primary">
+                    <i class="fa fa-plus"></i> Yeni Kaynak Ürün Ekle
+                </button>
+            </div>
+        </div>
+        <div class="form-group hidden-dest">
+            <label class="control-label col-sm-3 col-md-3 col-lg-2">Hedef Ürünler</label>
+            <div class="col-md-8 col-sm-8">
+                <ul class="list-group" id="destlist">
+                    <!-- ko foreach: DestList-->
+                    <li class="list-group-item">
+                        <input type="hidden" data-bind="value: Id, attr: { name: 'Destinations[' + $index() + '].ProductId' }" />
+                        <span data-bind="text: Text"></span>
+                        <a href="#" data-bind="click: function (data, event) { $parent.RemoveDest(Id) }" class="badge badge-danger">Sil</a>
+                    </li>
+                    <!-- /ko-->
+                </ul>
+            </div>
+        </div>
+        <div class="form-group hidden-dest">
+            <div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-2 col-md-8 col-sm-8">
+                <button type="button" id="btnAddDest" class="btn btn-primary">
+                    <i class="fa fa-plus"></i> Yeni Hedef Ürün Ekle
+                </button>
+            </div>
+        </div>
+
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}
+
+@section Subhtml {
+    @Html.Partial("Modals/ProductSelector")
+    @Html.Partial("Modals/FileManager")
+}
+
+@section pagecss {
+    @Styles.Render("~/plugins/datepicker-css")
+    @Styles.Render("~/plugins/select2-css")
+    @Styles.Render("~/plugins/summernote-css")
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/plugins/datepicker-js")
+    @Scripts.Render("~/plugins/summernote-js")
+
+    <script type="text/javascript">
+        $.validator.setDefaults({
+            ignore: [],
+            // any other default options and/or rules
+        });
+
+        var slideinput = "";
+
+        function campaignMethodChange () {
+            var cmp = $("#CampaignMethod").val();
+            switch (cmp) {
+                case "2":
+                    $(".hidden-dest").show();
+                    break;
+                default:
+                    $(".hidden-dest").hide();
+                    break;
+            }
+        }
+
+        $(document).ready(function () {
+
+            $(".datepicker").datepicker({ language: 'tr' });
+
+            //$(".imageChooser").click(function () {
+            //    slideinput = $(this).attr("data-target");
+            //    $("#mdlFileManager").modal("show");
+            //});
+
+            campaignMethodChange();
+
+            $("#CampaignMethod").change(campaignMethodChange);
+
+            $(".summernote").summernote({ height: 500 });
+        });
+
+        function setfilename(filename) {
+            $("#SlideUrl").val(filename);
+            $("#mdlFileManager").modal("hide");
+        }
+
+
+        var appSourceProducts = function () {
+            var self = this;
+            self.SourceList = ko.observableArray(@Html.Raw(ViewBag.SourceProds));
+            self.indexList = [];
+            self.AppendSource = function (id, text) {
+                if (self.indexList.indexOf(id) < 0 && self.indexListD.indexOf(id) < 0) {
+                    self.SourceList.push({
+                        Id: id,
+                        Text: text
+                    });
+                    self.indexList.push(id);
+                }
+            };
+            self.RemoveSource = function (id) {
+                var ind = self.indexList.indexOf(id);
+                if (ind >= 0) {
+                    self.SourceList.splice(ind, 1);
+                    self.indexList.splice(ind, 1);
+                }
+            };
+            $("#btnAddSource").click(function () {
+                $("#mdlProducts").modal("show");
+                window.selectorApi = appSourceProducts;
+            });
+            return {
+                init: function () {
+                    ko.applyBindings(self, document.getElementById("sourcelist"));
+                },
+                add: function (id, text) {
+                    self.AppendSource(id, text);
+                },
+                remove: function (id) {
+                    self.RemoveSource(id);
+                }
+            }
+        }();
+
+        var appDestProducts = function () {
+            var self = this;
+            self.DestList = ko.observableArray(@Html.Raw(ViewBag.DestinationsProds));
+            self.indexListD = [];
+            self.AppendDest = function (id, text) {
+                if (self.indexListD.indexOf(id) < 0 && self.indexList.indexOf(id) < 0) {
+                    self.DestList.push({
+                        Id: id,
+                        Text: text
+                    });
+                    self.indexListD.push(id);
+                }
+            };
+            self.RemoveDest = function (id) {
+                var ind = self.indexListD.indexOf(id);
+                if (ind >= 0) {
+                    self.DestList.splice(ind, 1);
+                    self.indexListD.splice(ind, 1);
+                }
+            };
+            $("#btnAddDest").click(function () {
+                $("#mdlProducts").modal("show");
+                window.selectorApi = appDestProducts;
+            });
+            return {
+                init: function () {
+                    ko.applyBindings(self, document.getElementById("destlist"));
+                },
+                add: function (id, text) {
+                    self.AppendDest(id, text);
+                },
+                remove: function (id) {
+                    self.RemoveDest(id);
+                }
+            }
+        }();
+
+        $(document).ready(function () {
+            appSourceProducts.init();
+            appDestProducts.init();
+        });
+
+    </script>
+
+    <script type="text/javascript" src="~/Scripts/app/appProductSelector.js"></script>
+}

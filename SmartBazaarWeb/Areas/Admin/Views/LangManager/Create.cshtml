@@ -1,0 +1,26 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.LangBooksEditViewModel
+
+@{
+    ViewBag.Title = "Yeni Dil";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Yeni Dil";
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Diller", "Index")
+    </li>
+}
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(m => m.Caption)
+        @Html.EditorFor(m => m.Code)
+        @Html.EditorFor(m => m.Status)
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}

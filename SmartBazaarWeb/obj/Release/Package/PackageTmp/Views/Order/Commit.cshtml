@@ -1,0 +1,22 @@
+﻿@model SmartBazaar.Web.Models.Site.OrderHeaderProcessModel
+
+@{
+    ViewBag.Title = "Sipariş Tamamlandı";
+}
+
+<h3>Siparişiniz tamamlandı...</h3>
+<p>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Sipariş No:</th>
+                <td>@Model.Id.ToString("00000000")</td>
+            </tr>
+            <tr>
+                <th>Toplam Tutar:</th>
+                <td>@string.Format("{0:F2}", Model.GrandTotal)</td>
+            </tr>
+        </tbody>
+    </table>
+    @Html.Raw(Model.OrderMessage)
+</p>

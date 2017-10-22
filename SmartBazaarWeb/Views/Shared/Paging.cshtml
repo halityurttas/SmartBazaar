@@ -1,0 +1,15 @@
+﻿@using SmartBazaar.Web.Helpers.Extensions
+@{ 
+    HttpContextBase bContext = new HttpContextWrapper(HttpContext.Current);
+    RouteData rd = RouteTable.Routes.GetRouteData(bContext);
+}
+@if (ViewData["CurrentPage"] != null) {
+    Html.Raw(
+        Html.Paging(
+        Controller: rd.GetRequiredString("controller"),
+        Action: rd.GetRequiredString("action"),
+        CurrentPage: (int)ViewData["CurrentPage"],
+        RecordCount: (int)ViewData["TotalPage"]
+        )
+    );
+}

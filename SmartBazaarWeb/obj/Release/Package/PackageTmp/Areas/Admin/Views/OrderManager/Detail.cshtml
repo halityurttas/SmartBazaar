@@ -1,0 +1,313 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.OrderHeadsEditViewModel
+
+@using SmartBazaar.Web.Areas.Admin.Models
+@using SmartBazaar.Web.Models.Common
+
+@{
+    ViewBag.Title = "Sipariş";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Sipariş Bilgileri #" + Model.Id.ToString("00000000") + " | " + string.Format("{0:dddd dd MMMM yyyy HH:mm}", Model.OrderDate);
+    var payment = ViewBag.Payment as PaymentEntitiesEditViewModel;
+    var user = ViewBag.User as SmartBazaar.Web.Models.Ident.ApplicationUser;
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Siparişler", "Index")
+    </li>
+}
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="portlet blue-hoki box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-sliders"></i> Detaylar
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Sipariş No:</div>
+                    <div class="col-xs-7 value">@Model.Id.ToString("00000000")</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Tarih - Saat</div>
+                    <div class="col-xs-7 value">@string.Format("{0:dd.MM.yyyy HH:mm}", Model.OrderDate)</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Durum</div>
+                    <div class="col-xs-7 value"><span class="label @OrderHeadsListProvider.GetStatusCss()[Model.Status]">@OrderHeadsListProvider.GetStatuses()[Model.Status]</span></div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Tutar</div>
+                    <div class="col-xs-7 value">@string.Format("{0:F2} TL", Model.GrandTotal)</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Nakliye</div>
+                    <div class="col-xs-7 value">@Model.ShipmentTypes.Caption</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Ödeme Şekli</div>
+                    <div class="col-xs-7 value">
+                        @if (payment != null)
+                        {
+                            @payment.PaymentType @(string.IsNullOrEmpty(payment.PaymentInstallment) ? "" : string.Format(" ({0})", payment.PaymentInstallment))
+                        }
+                    </div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Ödeme Durumu</div>
+                    <div class="col-xs-7 value">
+                        @if (payment != null)
+                        {
+                            <span class="label label-@PaymentEntitiesListsProvider.GetStatusCss()[payment.Status]">@PaymentEntitiesListsProvider.GetStatuses()[payment.Status]</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="portlet blue-hoki box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i> Müşteri Bilgileri
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Ünvan</div>
+                    <div class="col-xs-7 value">@Model.Customer.Caption <a href="@Url.Action("Detail", "CustomerManager", new { id = Model.CustomerId })"><i class="fa fa-external-link"></i></a></div>
+                </div>
+                @if (Model.Customer.CustomerType == 2)
+                {
+                    <div class="row static-info">
+                        <div class="col-xs-5 name">Firma</div>
+                        <div class="col-xs-7 value">@Model.Customer.Company</div>
+                    </div>
+                }
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Telefon</div>
+                    <div class="col-xs-7 value">@Model.Customer.ContactPhone</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">E-Posta</div>
+                    <div class="col-xs-7 value">@user.Email</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Vergi No</div>
+                    <div class="col-xs-7 value">@Model.Customer.TaxNr</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Vergi Dairesi</div>
+                    <div class="col-xs-7 value">@Model.Customer.TaxOffice</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="portlet blue box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-truck"></i> Nakliye Adresi
+                </div>
+            </div>
+            @if (Model.ShipmentAddress != null)
+            {
+            <div class="portlet-body">
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Tanım</div>
+                    <div class="col-xs-7 value">@Model.ShipmentAddress.Title</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">İl</div>
+                    <div class="col-xs-7 value">@Model.ShipmentAddress.City</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">İlçe</div>
+                    <div class="col-xs-7 value">@Model.ShipmentAddress.District</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Kasaba/Köy</div>
+                    <div class="col-xs-7 value">@Model.ShipmentAddress.Town</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Posta Kodu</div>
+                    <div class="col-xs-7 value">@Model.ShipmentAddress.PostalCode</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Detay</div>
+                    <div class="col-xs-7 value">@Model.ShipmentAddress.Detail</div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="portlet blue box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-print"></i> Fatura Adresi
+                </div>
+            </div>
+            @if (Model.InvoiceAddress != null)
+            {
+            <div class="portlet-body">
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Tanım</div>
+                    <div class="col-xs-7 value">@Model.InvoiceAddress.Title</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">İl</div>
+                    <div class="col-xs-7 value">@Model.InvoiceAddress.City</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">İlçe</div>
+                    <div class="col-xs-7 value">@Model.InvoiceAddress.District</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Kasaba/Köy</div>
+                    <div class="col-xs-7 value">@Model.InvoiceAddress.Town</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Posta Kodu</div>
+                    <div class="col-xs-7 value">@Model.InvoiceAddress.PostalCode</div>
+                </div>
+                <div class="row static-info">
+                    <div class="col-xs-5 name">Detay</div>
+                    <div class="col-xs-7 value">@Model.InvoiceAddress.Detail</div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet grey-cascade box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-calendar-o"></i> Notlar
+                </div>
+            </div>
+            <div class="portlet-body">
+                <p>
+                    @Model.Note
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet grey-cascade box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-calendar-o"></i> Siparişler
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ürün Kodu</th>
+                            <th>Ürün Adı</th>
+                            <th>Fiyat</th>
+                            <th>Miktar</th>
+                            <th>Toplam</th>
+                            <th>Vergi</th>
+                            <th>Tutar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var line in Model.OrderLines)
+                        {
+                            <tr>
+                                <td>@line.ProductCode</td>
+                                <td>@line.ProductName</td>
+                                <td>@string.Format("{0:F2} TL", line.Price)</td>
+                                <td>@line.Quantity</td>
+                                <td>@string.Format("{0:F2} TL", line.Price * line.Quantity)</td>
+                                <td>@Html.Raw(string.Format("{1:F2} TL <small><small>%{0:F2}</small></small>", line.TaxRate, line.TaxCost))</td>
+                                <td>@string.Format("{0:F2} TL", line.Total)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 hidden-print">
+        <div class="well form-horizontal">
+            @using (Html.BeginForm("UpdateStatus", "OrderManager", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label class="col-xs-5 control-label">Sipariş Durumu Güncelle</label>
+                    <div class="col-xs-5">
+                        @Html.DropDownList("Statuses", null, new { @class = "form-control" })
+                    </div>
+                    <div class="col-xs-2">
+                        @Html.Hidden("Id")
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+            @using (Html.BeginForm("UpdateStatus", "PaymentManager", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label class="col-xs-5 control-label">Ödeme Durumu Güncelle</label>
+                    <div class="col-xs-5">
+                        @Html.DropDownList("PayStatuses", null, new { @class = "form-control" })
+                    </div>
+                    <div class="col-xs-2">
+                        @Html.Hidden("Id")
+                        @Html.Hidden("PayId")
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+                <div class="form-group">
+                    <label class="col-xs-5 control-label">Siparişi Yazdır</label>
+                    <div class="col-xs-7">
+                        <button type="button" class="btn btn-primary" onclick="javascript: window.print();">
+                            <i class="fa fa-print"></i> Yazdır
+                        </button>
+                    </div>
+                </div>
+            
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="well">
+            <div class="row static-info align-reverse">
+                <div class="col-xs-5 name">Alt Toplam</div>
+                <div class="col-xs-7 value">@string.Format("{0:F2} TL", Model.OrderTotal)</div>
+            </div>
+            <div class="row static-info align-reverse">
+                <div class="col-xs-5 name">Nakliye Bedeli</div>
+                <div class="col-xs-7 value">@string.Format("{0:F2} TL", Model.ShipCost)</div>
+            </div>
+            <div class="row static-info align-reverse">
+                <div class="col-xs-5 name">Ödeme Ücreti</div>
+                <div class="col-xs-7 value">@string.Format("{0:F2} TL", (Model.PaymentFee + Model.InstallmentFee))</div>
+            </div>
+            <div class="row static-info align-reverse">
+                <div class="col-xs-5 name">KDV</div>
+                <div class="col-xs-7 value">@string.Format("{0:F2} TL", Model.TaxTotal)</div>
+            </div>
+            <div class="row static-info align-reverse">
+                <div class="col-xs-5 name">Genel Toplam</div>
+                <div class="col-xs-7 value">@string.Format("{0:F2} TL", Model.GrandTotal)</div>
+            </div>
+        </div>
+    </div>
+</div>

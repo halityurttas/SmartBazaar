@@ -1,0 +1,213 @@
+﻿@{
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    string view = (ViewContext.RouteData.Values["action"] ?? "").ToString();
+}
+<li class="@(controller == "Manager" || controller == "OrderManager" ? "start active open" : "")">
+    <a href="javascript:;">
+        <i class="icon-basket"></i>
+        <span class="title">eTicaret</span>
+        @if (controller == "Manager")
+        {<span class="selected"></span>}
+        <span class="arrow @(controller == "Manager" ? "start active open" : "")"></span>
+    </a>
+    <ul class="sub-menu">
+        <li class="@(controller == "Manager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "Manager")">
+                <i class="icon-home"></i>
+                Dashboard
+            </a>
+        </li>
+        <li class="@(controller == "OrderManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "OrderManager")">
+                <i class="icon-basket"></i>
+                Siparişler
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="@(controller == "CatalogManager" ? "start active open" : "")">
+    <a href="javascript:;">
+        <i class="icon-handbag"></i>
+        <span class="title">Ürünler</span>
+        @if (controller == "CatalogManager")
+        {<span class="selected"></span>}
+        <span class="arrow @(controller == "CatalogManager" ? "start active open" : "")"></span>
+    </a>
+    <ul class="sub-menu">
+        <li class="@(controller == "CatalogManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "CatalogManager")">
+                <i class="icon-handbag"></i>
+                Ürün Listesi
+            </a>
+        </li>
+        <li class="@(controller == "CatalogManager" && view == "Brands" ? "active" : "")">
+            <a href="@Url.Action("Brands", "CatalogManager")">
+                <i class="icon-globe"></i>
+                Markalar
+            </a>
+        </li>
+        <li class="@(controller == "CatalogManager" && view == "Categories" ? "active" : "")">
+            <a href="@Url.Action("Categories", "CatalogManager")">
+                <i class="icon-tag"></i>
+                Kategoriler
+            </a>
+        </li>
+        <li class="@(controller == "CatalogManager" && view == "ImportExcel" ? "active" : "")">
+            <a href="@Url.Action("ImportExcel", "CatalogManager")">
+                <i class="icon-control-play"></i>
+                Excel Ürün Yükleme
+            </a>
+        </li>
+        <li class="@(controller == "CatalogManager" && view == "MultiProcess" ? "active" : "")">
+            <a href="@Url.Action("MultiProcess", "CatalogManager")">
+                <i class="icon-control-play"></i>
+                Toplu Ürün Güncelleme
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="@(controller == "CampaignManager" ? "start active open" : "")">
+    <a href="javascript:;">
+        <i class="icon-puzzle"></i>
+        <span class="title">Kampanyalar</span>
+        @if (controller == "CampaignManager")
+        {<span class="selected"></span>}
+        <span class="arrow @(controller == "CampaignManager" ? "start active open" : "")"></span>
+    </a>
+    <ul class="sub-menu">
+        <li class="@(controller == "CampaignManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "CampaignManager")">
+                <i class="icon-puzzle"></i>
+                Kampanyalar
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="@(controller == "CustomerManager" ? "start active open" : "")">
+    <a href="javascript:;">
+        <i class="icon-user"></i>
+        <span class="title">Müşteriler</span>
+        @if (controller == "CustomerManager")
+        {<span class="selected"></span>}
+        <span class="arrow @(controller == "CustomerManager" ? "start active open" : "")"></span>
+    </a>
+    <ul class="sub-menu">
+        <li class="@(controller == "CustomerManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "CustomerManager")">
+                <i class="icon-user"></i>
+                Müşteri Listesi
+            </a>
+        </li>
+        <li class="@(controller == "CustomerManager" && view == "Groups" ? "active" : "")">
+            <a href="@Url.Action("Groups", "CustomerManager")">
+                <i class="icon-users"></i>
+                Müşteri Grupları
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="@(controller == "PaymentManager" || controller == "PosManager" ? "start active open" : "")">
+    <a href="javascript:;">
+        <i class="icon-credit-card"></i>
+        <span class="title">Tahsilat</span>
+        @if (controller == "PaymentManager" || controller == "PosManager")
+        {<span class="selected"></span>}
+        <span class="arrow @(controller == "PaymentManager" || controller == "PosManager" ? "start active open" : "")"></span>
+    </a>
+    <ul class="sub-menu">
+        <li class="@(controller == "PaymentManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "PaymentManager")">
+                <i class="icon-wallet"></i>
+                Ödeme Yöntemleri
+            </a>
+        </li>
+        <li class="@(controller == "PosManager" && view == "Cards" ? "active" : "")">
+            <a href="@Url.Action("Cards", "PosManager")">
+                <i class="icon-wallet"></i>
+                Kredi Kart Tanımları
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="@(controller == "ShipmentManager" ? "start active open" : "")">
+    <a href="javascript:;">
+        <i class="icon-social-dropbox"></i>
+        <span class="title">Nakliye</span>
+        @if (controller == "ShipmentManager")
+        {<span class="selected"></span>}
+        <span class="arrow @(controller == "ShipmentManager" ? "start active open" : "")"></span>
+    </a>
+    <ul class="sub-menu">
+        <li class="@(controller == "ShipmentManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "ShipmentManager")">
+                <i class="icon-directions"></i>
+                Nakliye Yöntemleri
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="@(controller == "PageManager" || controller == "HtmlBlocksManager" || controller == "SliderManager" ? "start active open" : "")">
+    <a href="javascript:;">
+        <i class="icon-book-open"></i>
+        <span class="title">İçerik</span>
+        @if (controller == "PageManager" || controller == "HtmlBlocksManager" || controller == "SliderManager")
+        {<span class="selected"></span>}
+        <span class="arrow @(controller == "PageManager" || controller == "HtmlBlocksManager" || controller == "SliderManager" ? "active" : "")"></span>
+    </a>
+    <ul class="sub-menu">
+        <li class="@(controller == "PageManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "PageManager")">
+                <i class="icon-folder-alt"></i>
+                Sayfalar
+            </a>
+        </li>
+        <li class="@(controller == "HtmlBlocksManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "HtmlBlocksManager")">
+                <i class="icon-folder"></i>
+                Bloklar
+            </a>
+        </li>
+        <li class="@(controller == "SliderManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "SliderManager")">
+                <i class="icon-layers"></i>
+                Slider
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="@(controller == "TaxManager" || controller == "SettingsManager" || controller == "ParamManager" ? "start active open" : "")">
+    <a href="javascript:;">
+        <i class="icon-key"></i>
+        <span class="title">Tanımlar</span>
+        @if (controller == "TaxManager" || controller == "SettingsManager" || controller == "ParamManager")
+        {<span class="selected"></span>}
+        <span class="arrow @(controller == "TaxManager" || controller == "SettingsManager" || controller == "ParamManager" ? "start active open" : "")"></span>
+    </a>
+    <ul class="sub-menu">
+        <li class="@(controller == "TaxManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "TaxManager")">
+                <i class="icon-note"></i>
+                Vergi Oranları
+            </a>
+        </li>
+        <li class="@(controller == "SettingsManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "SettingsManager")">
+                <i class="icon-wrench"></i>
+                Genel Ayarlar
+            </a>
+        </li>
+        <li class="@(controller == "SettingsManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Contact", "SettingsManager")">
+                <i class="icon-wrench"></i>
+                İletişim Bilgileri
+            </a>
+        </li>
+        <li class="@(controller == "ParamManager" && view == "Index" ? "active" : "")">
+            <a href="@Url.Action("Index", "ParamManager")">
+                <i class="icon-wrench"></i>
+                Parametreler
+            </a>
+        </li>
+    </ul>
+</li>
+

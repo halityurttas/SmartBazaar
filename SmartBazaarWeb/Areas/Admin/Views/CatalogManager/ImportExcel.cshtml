@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Excel Alma";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Excel İle Ürün Alma";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Ürünler</a>
+    </li>
+}
+
+<div class="note note-warning">
+    <h4 class="block">Dikkat! Hatalı ürünleriniz hakkında</h4>
+    <p>
+        Sisteme yüklenecek Excel dosyası için ürün listesinin Excele aktarılmış halini temizleyerek boş bir şablon elde etmiş olursunuz. Sisteme Excel ile yükleme yaptığınızda yüklenen ürünlerin Ürün Kodu alanlarına göre kayıtlar indislenir. Eğer bir ürünün kodu sistemde mevcut ise ürünün bilgileri güncellenir, yok ise yeni ürün olarak sisteme eklenir. Var olan bir ürünün kodu bu yöntemle değiştirilemez! Yüklenen ürünlerin kategori adları, vergi oranı tanım adı ve varsa marka adı doğru girilmelidir. Tavsiyemiz mevcut ürünlere ait kayıtları dışarı aktarıp daha sonra bu kayıtları örnek alarak işlem yapmanız. İçeri tüm ürünler aktarıldığında ürün listesine yönlendirilirsiniz, hatalı ürünler olduğunda ise hatalı girdiğiniz ürünlerin listesi yine bir Excel dosyasında otomatik indirmeye gönderilecektir. Hatalı ürünleri indirip tekrar düzelterek sisteme aktarabilirsiniz.
+    </p>
+</div>
+
+@using (Html.BeginForm("ImportExcel", "CatalogManager", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-3">Excel Dosyası</label>
+            <div class="col-sm-9">
+                <input type="file" name="excel" class="form-control" />
+            </div>
+        </div>
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}

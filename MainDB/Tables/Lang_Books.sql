@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Lang_Books]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Code] VARCHAR(10) NOT NULL, 
+    [Title] NVARCHAR(25) NOT NULL, 
+    [Status] SMALLINT NOT NULL
+)

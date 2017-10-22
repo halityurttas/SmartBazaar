@@ -1,0 +1,5 @@
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\MainDB\bin\Debug\MainDB.dacpac
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\MainDB\bin\Debug\MainDB.dll
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\MainDB\bin\Debug\MainDB.pdb
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\MainDB\obj\Debug\MainDB.dll
+E:\Depo\Projeler\SmartBazaar\SmartBazaar\MainDB\obj\Debug\MainDB.pdb

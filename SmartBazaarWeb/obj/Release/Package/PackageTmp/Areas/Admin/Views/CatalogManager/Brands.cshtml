@@ -1,0 +1,54 @@
+﻿@model IEnumerable<SmartBazaar.Web.Areas.Admin.Models.CatalogBrandListViewModel>
+
+@{
+    ViewBag.Title = "Markalar";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/ListLayout.cshtml";
+    ViewBag.CreateUrl = @Url.Action("CreateBrand");
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Ürünler</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        @Html.ActionLink("Markalar", "Brands")
+    </li>
+}
+@section Filters {
+    <div class="form-group col-sm-9">
+        <label class="control-label col-md-3 col-sm-4">@Html.DisplayNameFor(model => model.Title)</label>
+        <div class="col-md-9 col-sm-8">
+            @Html.DropDownList("Status", null, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+<tr>
+    <th>
+        @Html.DisplayNameFor(model => model.Title)
+    </th>
+    <th style="width: 100px;">
+        @Html.DisplayNameFor(model => model.Status)
+    </th>
+    <th style="width: 140px;">
+
+    </th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.ActionLink("Düzenle", "EditBrand", new { id = item.Id }, new { @class = "label label-primary" })
+            @Html.ActionLink("Sil", "DeleteBrand", new { id = item.Id }, new { @class = "label label-danger", onclick = "return confirm('Bu kayit silinsin mi?')" })
+        </td>
+    </tr>
+}
+

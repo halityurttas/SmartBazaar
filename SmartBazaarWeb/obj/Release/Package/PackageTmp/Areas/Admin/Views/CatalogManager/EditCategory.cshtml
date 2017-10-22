@@ -1,0 +1,152 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.CatalogCategoryEditViewModel
+@using SmartBazaar.Web.Areas.Admin.Models
+
+@{
+    ViewBag.Title = "Kategoriler";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Kategori Bilgileri";
+}
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Ürünler</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        @Html.ActionLink("Kategoriler", "Categories")
+    </li>
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.Caption)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ParentId, htmlAttributes: new { @class = "control-label col-sm-3 col-md-3 col-lg-2" })
+            <div class="col-md-4 col-sm-6">
+                <div class="input-group">
+                    <input type="text" id="FakeParentId" class="form-control" disabled="disabled" value="@Model.ParentTitle" />
+                    @Html.HiddenFor(model => model.ParentId, new { style = "display: none" })
+                    @Html.HiddenFor(model => model.Level, new { style = "display: none" })
+                    <div class="input-group-btn">
+                        <button type="button" id="ClearParent" class="btn btn-danger">X</button>
+                        <button type="button" id="ChoseParent" class="btn btn-info" data-toggle="modal" data-target="#ModalChoseParent">...</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        @Html.EditorFor(model => model.Description)
+        @Html.EditorFor(model => model.Pos)
+        @Html.EditorFor(model => model.Status)
+        @Html.EditorFor(model => model.ExternalRef1)
+        @Html.EditorFor(model => model.ExternalRef2)
+        @Html.EditorFor(model => model.ExternalRef3)
+        @Html.EditorFor(model => model.IsDisplayInMenu)
+        @Html.EditorFor(model => model.IsDisplayInMainPage)
+        <div class="form-group">
+            @Html.LabelFor(model => model.ImageUrl, new { @class = "control-label col-sm-3 col-md-3 col-lg-2" })
+            <div class="col-md-4 col-sm-6">
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.ImageUrl, new { @class = "form-control" })
+                    <div class="input-group-btn">
+                        <button type="button" id="ImgUrlChooseA" class="btn btn-info" data-toggle="modal" data-target="#mdlFileManager">...</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}
+@section Subhtml {
+    <div class="modal fade" id="ModalChoseParent" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Kategori Seçin</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="categoryTree">
+                        <ul>
+                            @foreach (var item in (ViewData["CategoryTree"] as CatalogCategoryTreeModel).Items)
+                            {
+                                <li data-id="@item.Id" data-title="@item.Title" data-level="@item.Level">
+                                    @item.Title
+                                    @SubCat(item)
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn green-haze" id="CategorySet">Seç</button>
+                    <button type="button" class="btn red" id="CategoryClear">Temizle</button>
+                    <button type="button" class="btn default" data-dismiss="modal">İptal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("Modals/FileManager")
+}
+@helper SubCat(CatalogCategoryTreeItemModel item)
+{
+    if (item.Items.Count > 0)
+    {
+        <ul>
+            @foreach (var subitem in item.Items)
+            {
+                <li data-id="@subitem.Id" data-title="@subitem.Title" data-level="@subitem.Level">
+                    @subitem.Title
+                    @SubCat(subitem)
+                </li>
+            }
+        </ul>
+    }
+}
+
+
+@section css {
+    @Styles.Render("~/plugins/jstree-css")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/jstree-js")
+    <script type="text/javascript">
+        var fakeParentId = "";
+        var parentId = "";
+        var level = "";
+
+        $(document).ready(function () {
+            $("#categoryTree").on('changed.jstree', function (e, data) {
+                var item = $("#" + data.selected);
+                fakeParentId = $(item).attr("data-title");
+                parentId = $(item).attr("data-id");
+                level = Number($(item).attr("data-level")) + 1;
+            }).jstree();
+            $("#CategorySet").click(function () {
+                $("#FakeParentId").val(fakeParentId);
+                $("#ParentId").val(parentId);
+                $("#Level").val(Number(level) + 1);
+                $("#ModalChoseParent").modal('hide');
+            });
+            $("#CategoryClear").click(function () {
+                $("#FakeParentId").val("");
+                $("#ParentId").val("");
+                $("#Level").val(1);
+                $("#ModalChoseParent").modal('hide');
+            });
+        });
+        function setfilename(filename) {
+            $("#ImageUrl").val(filename);
+            $("#mdlFileManager").modal("hide");
+        }
+    </script>
+}

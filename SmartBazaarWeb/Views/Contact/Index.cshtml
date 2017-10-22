@@ -1,0 +1,84 @@
+﻿@model SmartBazaar.Web.Models.Site.ContactMailViewModel
+
+@{
+    ViewBag.Title = "Iletisim";
+    SmartBazaar.Web.Models.Internal.ContactModel contactData = ViewBag.ContactData;
+}
+
+<div class="container-fluid">
+    @contactData.GMapData
+</div>
+
+<div class="row">
+    @using (Html.BeginForm("ContactForm", "Contact", FormMethod.Post, new { @class = "" }))
+    {
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label>Adınız Soyadınız</label>
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label>E-Posta Adresiniz</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label>Telefon</label>
+                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Phone, null, new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label>Telefon</label>
+                @Html.TextAreaFor(m => m.Comment, new { @class = "form-control", rows = 5 })
+                @Html.ValidationMessageFor(m => m.Comment, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Gönder</button>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <h3>İletişim Bilgileri</h3>
+            <h5>Adres</h5>
+            <div>@contactData.Address</div>
+            <h5>Telefon</h5>
+            <div>
+                @if (contactData.Phone1Title != null)
+                {
+                    <label>@contactData.Phone1Title</label>
+                }
+                @contactData.Phone1
+            </div>
+            @if (contactData.Phone2 != null)
+            {
+                <div>
+                    @if (contactData.Phone2Title != null)
+                    {
+                        <label>@contactData.Phone2Title</label>
+                    }
+                    @contactData.Phone2
+                </div>
+            }
+            <h5>E-Posta</h5>
+            <div>
+                @if (contactData.Email1Title != null)
+                {
+                    <label>@contactData.Email1Title</label>
+                }
+                @contactData.Email1
+            </div>
+            @if (contactData.Email2 != null)
+            {
+                <div>
+                    @if (contactData.Email2Title != null)
+                    {
+                        <label>@contactData.Email2Title</label>
+                    }
+                    @contactData.Email2
+                </div>
+            }
+        </div>
+    }
+</div>

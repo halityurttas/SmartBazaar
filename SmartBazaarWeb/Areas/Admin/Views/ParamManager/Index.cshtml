@@ -1,0 +1,78 @@
+﻿@model IEnumerable<SmartBazaar.Web.Areas.Admin.Models.ParamsListViewModel>
+
+@{
+    ViewBag.Title = "Parametreler";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/ListLayout.cshtml";
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Parametreler", "Index")
+    </li>
+}
+@section Filters {
+    <div class="form-group col-sm-9">
+        <label class="control-label col-md-3 col-sm-4">Grup</label>
+        <div class="col-md-9 col-sm-8">
+            @Html.DropDownList("group", null, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+<tr>
+    <th>@Html.DisplayNameFor(model => model.Title)</th>
+    <th>@Html.DisplayNameFor(model => model.Value)</th>
+    <th></th>
+</tr>
+@foreach (var item in Model)
+{
+    using (Html.BeginForm("Update", "ParamManager", FormMethod.Post, new { @class = "paramform" }))
+    {
+        @Html.HiddenFor(model => item.Id)
+        @Html.HiddenFor(model => item.Title)
+    <tr>
+        <td>@item.Title</td>
+        <td>@Html.TextBoxFor(model => item.Value, new { @class = "form-control" })</td>
+        <td>
+            <button type="submit" class="btn btn-sm btn-success">
+                <i class="fa fa-refresh"></i> Kaydet
+            </button>
+        </td>
+    </tr>
+    }
+}
+
+@section Subhtml {
+<div style="display: none;" class="modal fade" id="mdlAlert" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Dikkat</h4>
+            </div>
+            <div class="modal-body">
+                <span id="modal_message"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+}
+
+@section scripts {
+    <script src="~/Scripts/jquery.form.min.js"></script>
+    <script type="text/javascript">
+        $(".paramform").ajaxForm(function(data) {
+            if (data == "True") {
+                $("#modal_message").html("İşlem tamamlandı");
+                $("#mdlAlert").modal();
+            } else {
+                alert(data);
+            }
+        });
+    </script>
+}

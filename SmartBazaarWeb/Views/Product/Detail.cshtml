@@ -1,0 +1,297 @@
+﻿@model SmartBazaar.Web.Models.Site.ProductDetailViewModel
+@{
+    ViewBag.Title = Model.MetaTitle;
+    ViewBag.Keywords = Model.MetaKeywords;
+    ViewBag.Description = Model.MetaDescription;
+}
+
+<div class="row">
+    <div class="col-sm-6">
+        <img src="~/WebFiles/@(Model.Image).ashx?width=400&height=400&mode=crop" class="img-responsive" />
+        @foreach (var img in Model.Images)
+        {
+            <img src="~/WebFiles/@(img.ImageUrl).ashx?width=400&height=400&mode=crop" class="img-responsive" />
+        }
+    </div>
+    <div class="col-sm-6">
+        <h3>@Model.Title</h3>
+        <dl>
+            <dt>Marka:</dt>
+            <dd>@Model.Brand</dd>
+            @if (Model.Price.OriginalPrice != Model.Price.Price)
+            {
+                <dt style="text-decoration: line-through;">Fiyat:</dt>
+                <dd style="text-decoration: line-through;">@string.Format("{0:F2} TL + KDV", Model.Price.OriginalPrice)</dd>
+            }
+            <dt>Fiyat:</dt>
+            <dd>@string.Format("{0:F2} TL + KDV", Model.Price.Price)</dd>
+            <dt>KDV Dahil:</dt>
+            <dd>@string.Format("{0:F2} TL", Model.Price.Price * (decimal)((Model.Price.TaxRate / 100) + 1))</dd>
+        </dl>
+        <div class="row form-horizontal">
+            <div class="col-xs-6">
+                <input type="text" id="order_count" class="form-control spinner-lg input-lg" value="1" />
+            </div>
+            <div class="col-xs-6">
+                @if (Model.IsBuyable)
+                {
+                    <button class="btn btn-success btn-lg" type="button" onclick="appBasketBox.addBasket(@(Model.Id), $('#order_count').val())">
+                        Sepete Ekle
+                    </button>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top: 7px;">
+    <div class="col-md-12">
+        <ul id="prod-tabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#detail" role="tab" data-toggle="tab">Detay</a>
+            </li>
+            <li role="presentation">
+                <a href="#props" role="tab" data-toggle="tab">Özellikler</a>
+            </li>
+            <li role="presentation">
+                <a href="#payment" role="tab" data-toggle="tab">Ödeme Seçenekleri</a>
+            </li>
+            <li role="presentation">
+                <a href="#comments" role="tab" data-toggle="tab">Yorumlar</a>
+            </li>
+            <li role="presentation">
+                <a href="#related" role="tab" data-toggle="tab">İlişkili Ürünler</a>
+            </li>
+            <li role="presentation">
+                <a href="#campaign" role="tab" data-toggle="tab">Kampanyalar</a>
+            </li>
+        </ul>
+        <div id="prod-contents" class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="detail">
+                <p>
+                    @Html.Raw(Model.Detail)
+                </p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="props">
+                <p>
+                    <table class="table table-striped">
+                        <tbody>
+                            @foreach (var prop in Model.Props)
+                            {
+                                <tr>
+                                    <td style="width: 50%">@prop.Title</td>
+                                    <td style="width: 50%">@prop.Value</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="comments">
+                @if (SmartBazaar.Web.Business.Layers.SettingsLayer.SiteSetting.ShowComments)
+                {
+
+                    if (SmartBazaar.Web.Business.Layers.SettingsLayer.SiteSetting.UseFacebookComments)
+                    {
+                        <div class="fb-comments" data-href="http://localhost:6961" data-numposts="5"></div>
+                    }
+                    else
+                    {
+                        foreach (var comment in Model.Comments)
+                        {
+                            <div class="well well-sm">
+                                <h3>@comment.UserTitle <small>@comment.Created</small></h3><span>@comment.Rating</span>
+                                <p>
+                                    @comment.Description
+                                </p>
+                            </div>
+                        }
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            using (Html.BeginForm("AddComment", "Product", FormMethod.Post, new { id = "comment_form" }))
+                            {
+                                <div class="well well-sm">
+                                    <h3>Yorum Gönderin</h3>
+                                    <div id="commentholder">
+                                        @Html.Hidden("ProductId", ViewContext.RouteData.Values["id"])
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4">Puan</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="Rating" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4">Açıklama</label>
+                                                <div class="col-sm-8">
+                                                    <textarea class="form-control" rows="3" name="Description"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <button type="submit" class="btn btn-success">Gönder</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                }
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="payment">
+                <p>
+                    @if (Model.PaymentTypes.Any(a => a.Method == 1))
+                    {
+                        <table class="table table-advance table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Peşin Ödeme Yöntemi</th>
+                                    <th>Tutar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var paytype in Model.PaymentTypes.Where(w => w.Method == 1))
+                                {
+
+                                    <tr>
+                                        <td>@paytype.Title</td>
+                                        <td>@string.Format("{0:F2} TL", (Model.Price.PriceCalculated * (decimal)((paytype.CommissionRate / 100) + 1)) + paytype.ProcessFee)</td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </p>
+                @if (Model.PaymentTypes.Any(a => a.Method == 2))
+                {
+                    int paycnt = 0;
+                    <div class="row">
+                        @foreach (var paytype in Model.PaymentTypes.Where(w => w.Method == 2))
+                        {
+                            decimal priced = (Model.Price.PriceCalculated * (decimal)((paytype.CommissionRate / 100) + 1)) + paytype.ProcessFee;
+                            <div class="col-sm-4">
+                                <h4>@paytype.Title</h4>
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Taksit</th>
+                                            <th>Tutar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var inst in paytype.Installments.Where(w => w.NumberOf <= Model.MaxInstallment || Model.MaxInstallment == 0))
+                                        {
+                                            <tr>
+                                                <td>@inst.NumberOf Taksit</td>
+                                                <td>@string.Format("{0:F2} TL", priced * (decimal)((inst.Rate / 100) + 1))</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            if (++paycnt % 3 == 0)
+                            {
+                                @Html.Raw("</div><div class=\"row\">")
+                            }
+                        }
+                    </div>
+                }
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="related">
+                @foreach (var relitem in Model.Relations)
+                {
+                    <li>@relitem.Title</li>
+                }
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="campaign">
+                <div class="row">
+                    @{
+                        var union = Model.Pivots.Union(Model.RPivots);
+                    }
+                    @for (int i = 0; i < union.ToList().Count; i++)
+                    {
+                        var pivot = union.ToList()[i];
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <a href="@Url.Action("Detail", "Product", new { id = pivot.Id.ToString() + "-" + pivot.Title })">
+                                        <img src="~/WebFiles/@(pivot.Image).ashx?width=300&height=200&mode=crop" class="img-responsive" />
+                                    </a>
+                                    <h5>@pivot.Title</h5>
+                                    <p>
+                                        Fiyatı:
+                                        @if (pivot.Price.CampaignId.HasValue)
+                                        {
+                                            <small><span style="text-decoration: line-through">@string.Format("{0:F2} TL", pivot.Price.OriginalPriceCalculated)</span></small>
+                                        }
+                                        @string.Format("{0:F2} TL", pivot.Price.PriceCalculated)
+                                    </p>
+                                    <h5>@Model.Title</h5>
+                                    <p>
+                                        Fiyatı:
+                                        @if (pivot.RelPrice.CampaignId.HasValue)
+                                        {
+                                            <small><span style="text-decoration: line-through">@string.Format("{0:F2} TL", pivot.RelPrice.OriginalPriceCalculated)</span></small>
+                                        }
+                                        @string.Format("{0:F2} TL", pivot.RelPrice.PriceCalculated)
+                                    </p>
+                                    <p>
+                                        Toplam:
+                                        <small><span style="text-decoration: line-through">@string.Format("{0:F2} TL", pivot.Price.OriginalPriceCalculated + pivot.RelPrice.OriginalPriceCalculated)</span></small>
+                                        @String.Format("{0:F2} TL", pivot.Price.PriceCalculated + pivot.RelPrice.PriceCalculated)
+                                    </p>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <input type="text" id="order_count_@i" class="form-control spinner" value="1" />
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <a href="javascript:appBasketBox.addRelatedBasket(@(pivot.Side == 1 ? Model.Id : pivot.Id), @(pivot.Side == 1 ? pivot.Id : Model.Id), $('#order_count_@i').val(), @(pivot.CampaignId))" class="btn btn-success">Sepete Ekle</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        if ((i + 1) % 3 == 0)
+                        {
+                            @:@Html.Raw("</div><div class=\"row\">")
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section css {
+    @Styles.Render("~/plugins/touchspin-css")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/touchspin-js")
+    <script src="~/Scripts/jquery.form.min.js"></script>
+
+    <script type="text/javascript">
+        $(".spinner").TouchSpin({
+            min: 1,
+            max: 999,
+            verticalbuttons: true,
+            verticalupclass: 'fa fa-plus',
+            verticaldownclass: 'fa fa-minus'
+        });
+        $(".spinner-lg").TouchSpin({
+            min: 1,
+            max: 999,
+            verticalupclass: 'fa fa-plus',
+            verticaldownclass: 'fa fa-minus'
+        });
+        $("#comment_form").ajaxForm(function () {
+            $("#commentholder").html("<p>Yorumunuz onaylandıktan sonra yayınlanacaktır</p>");
+        });
+    </script>
+}

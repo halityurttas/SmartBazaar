@@ -1,0 +1,26 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.LangBooksEditViewModel
+
+@{
+    ViewBag.Title = "Dil Düzenle";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Dil Düzenleme";
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Diller", "Index")
+    </li>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(m => m.Caption)
+        @Html.EditorFor(m => m.Code)
+        @Html.EditorFor(m => m.Status)
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}

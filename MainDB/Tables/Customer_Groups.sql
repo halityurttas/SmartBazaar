@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Customer_Groups]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Title] NVARCHAR(150) NOT NULL, 
+	[PriceIndex] SMALLINT NOT NULL DEFAULT 1,
+    [Status] SMALLINT NOT NULL DEFAULT 1
+)

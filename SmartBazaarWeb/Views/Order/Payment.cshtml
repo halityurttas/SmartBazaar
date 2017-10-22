@@ -1,0 +1,67 @@
+﻿@model SmartBazaar.Web.Models.Internal.PaymentModel
+
+@{
+    ViewBag.Title = "Payment";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("Pos")
+            @Html.Hidden("Installment")
+            
+            @(ViewBag.Message ?? "")
+            
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Kredi Kart No</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.CCNumber, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Tarih</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(model => model.ExpiryMonth, new { @class = "form-control", placeholder = "AA" })
+                    </div>
+                    <div class="col-sm-4 col-sm-offset-1">
+                        @Html.TextBoxFor(model => model.ExpiryYear, new { @class = "form-control", placeholder = "YYYY" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3">CVV2</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(model => model.Ccv, new { @class = "form-control"})
+                    </div>
+                    <div class="col-sm-5">
+                        <small>Kartınızın arka yüzündeki 3 haneli rakam</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Tipi</label>
+                    <div class="col-sm-9">
+                        <div class="radio-inline">
+                            @Html.RadioButtonFor(model => model.CardType, "visa") VISA
+                        </div>
+                        <div class="radio-inline">
+                            @Html.RadioButtonFor(model => model.CardType, "mastercard") MASTERCARD
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Kart Üzerindeki İsim</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.PayerName, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9 col-sm-offset-3">
+                        <button type="submit" class="btn btn-success">Ödeme Yap</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

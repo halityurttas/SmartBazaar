@@ -1,0 +1,13 @@
+﻿@using SmartBazaar.Web.Models.Internal
+@model short
+
+@{
+    string cls = "default";
+    switch (Model)
+    {
+        case 1:
+            cls = "success";
+            break;
+    }
+}
+<span class="badge badge-@cls">@Statuses.GetTitle(Model)</span>

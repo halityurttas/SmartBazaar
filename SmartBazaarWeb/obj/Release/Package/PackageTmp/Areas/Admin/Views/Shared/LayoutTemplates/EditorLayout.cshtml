@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-content">
+    <h3 class="page-title">
+        @ViewBag.Title
+    </h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/Admin">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            @RenderSection("Breadcumbs", true)
+        </ul>
+    </div>
+    <div class="portlet light bordered">
+        <div class="portlet-title tabbable-line">
+
+            <div class="caption bold font-blue-sharp">
+                <i class="fa fa-bars font-blue-sharp"></i>
+                <span class="caption-subject uppercase">
+                    @ViewBag.Subtitle
+                </span>
+            </div>
+            @RenderSection("PortletCaption", false)
+        </div>
+        <div class="portlet-body">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+@RenderSection("Subhtml", false)
+
+@section pagecss {
+    @RenderSection("pagecss", false)
+}
+
+@section css {
+    @RenderSection("css", false)
+}
+@section scripts {
+    @RenderSection("scripts", false)
+}

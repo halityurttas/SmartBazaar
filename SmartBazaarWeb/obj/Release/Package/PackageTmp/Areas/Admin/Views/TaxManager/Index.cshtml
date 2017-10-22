@@ -1,0 +1,59 @@
+﻿@model IEnumerable<SmartBazaar.Web.Areas.Admin.Models.ProductTaxListViewModel>
+
+@{
+    ViewBag.Title = "Vergi Oranları";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/ListLayout.cshtml";
+    ViewBag.CreateUrl = @Url.Action("Create");
+}
+
+@section Breadcumbs {
+<li>
+    <a href="#">Tanımlar</a>
+    <i class="fa fa-angle-right"></i>
+</li>
+<li>
+    @Html.ActionLink("Vergi Oranları", "Index")
+</li>
+}
+
+@section Filters {
+<div class="form-group col-sm-9">
+    <label class="control-label col-md-3 col-sm-4">Durum</label>
+    <div class="col-md-9 col-sm-8">
+        @Html.DropDownList("Status", null, new { @class = "form-control" })
+    </div>
+</div>
+}
+
+
+<tr>
+    <th>
+        @Html.DisplayNameFor(model => model.Title)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.Rate)
+    </th>
+    <th style="width: 100px;">
+        Durum
+    </th>
+    <th style="width: 140px;"></th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Rate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }, new { @class = "label label-primary" })
+            @Html.ActionLink("Sil", "Delete", new { id = item.Id }, new { @class = "label label-danger", onclick = "return confirm('Kayit silinsin mi?')" })
+        </td>
+    </tr>
+}

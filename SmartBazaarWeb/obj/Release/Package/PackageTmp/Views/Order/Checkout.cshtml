@@ -1,0 +1,188 @@
+﻿@model SmartBazaar.Web.Models.Site.OrderHeaderProcessModel
+
+@{
+    ViewBag.Title = "Ödeme";
+}
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-advance">
+            <thead>
+                <tr>
+                    <th style="width: 60px;"></th>
+                    <th>Ürün</th>
+                    <th class="text-center" style="width: 100px;">Fiyat</th>
+                    <th class="text-center" style="width: 160px;">Miktar</th>
+                    <th class="text-center" style="width: 140px;">Tutar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var line in Model.Lines)
+                {
+                    <tr>
+                        <td><img src="~/WebFiles/@(line.ProductImage).ashx?width=60&height=40&mode=crop" /></td>
+                        <td><a href="@Url.Action("Detail", "Product", new { id = line.ProductId })">@line.ProductName</a><br /><small>@(line.CampaignId.HasValue ? "Kampanyalı" : "")</small></td>
+                        <td class="text-center">@string.Format("{0:F2} TL", line.Price)</td>
+                        <td class="text-center">@line.Quantity</td>
+                        <td class="text-center">@string.Format("{0:F2} TL", line.Total)<br /><small>@string.Format("{0:F2} TL + KDV", line.TotalPrice)</small></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-offset-8 col-md-4">
+        <table class="table table-advance">
+            <tbody>
+                <tr>
+                    <th>Toplam:</th>
+                    <td class="text-right">@String.Format("{0:F2}", Model.OrderTotal) TL</td>
+                </tr>
+                <tr>
+                    <th>Nakliye:</th>
+                    <td class="text-right">@String.Format("{0:F2}", Model.ShipCost) TL</td>
+                </tr>
+                <tr>
+                    <th>KDV:</th>
+                    <td class="text-right">@String.Format("{0:F2}", Model.TaxTotal) TL</td>
+                </tr>
+                <tr>
+                    <th>Genel:</th>
+                    <td class="text-right">@String.Format("{0:F2}", Model.GrandTotal) TL</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@if (ViewBag.ShipmentAddress != null)
+{
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>
+                        Nakliye Adresi
+                    </th>
+                    <td>@ViewBag.ShipmentAddress.Title</td>
+                </tr>
+                @if (ViewData["InvoiceAddress"] != null)
+                {
+                    <tr>
+                        <th>
+                            Fatura Adresi
+                        </th>
+                        <td>@ViewBag.InvoiceAddress.Title</td>
+                    </tr>
+                }
+                <tr>
+                    <th>Nakliye</th>
+                    <td>@ViewBag.ShipmentType.Title</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+}
+@using (Html.BeginForm("Transaction", "Order", FormMethod.Post)) {
+    @Html.AntiForgeryToken();
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Ödeme Yöntemi Seçimi
+            </div>
+            <div class="panel-body">
+                Aşağıda ki ödeme yöntemlerinden seçiminizi yaparak siparişinizi tamamlayabilirsiniz.
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">#</th>
+                        <th>Yöntem</th>
+                        <th style="width: 150px;">Bedel/İndirim</th>
+                        <th style="width: 150px;">Toplam Tutar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var paytype in Model.Payments.OrderBy(o => o.Method))
+                    {
+                        <tr>
+                            <td><input type="radio" name="paymentType" class="paymentType" value="@paytype.Id" data-method="@paytype.Method" /></td>
+                            <td>@paytype.Title</td>
+                            <td class="text-right">@String.Format("{0:F2}", (paytype.ProcessFee + (Model.GrandTotal * (decimal)(paytype.CommissionRate / 100)))) TL</td>
+                            <td class="text-right">@String.Format("{0:F2}", (Model.GrandTotal + paytype.ProcessFee + (Model.GrandTotal * (decimal)(paytype.CommissionRate / 100)))) TL</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row hidden installment-holder">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Taksit Seçenekleri
+            </div>
+            <div class="panel-body">
+                Kredi kartı ile ödeme seçtiğinizde taksit oranlarını seçmek için aşağıdaki seçenekleri kullanmalısınız! Kredi kartı ile ödemelerde sipariş öncesi ödeme ekranı ile karşılaşacaksınız. Ödemeniz tamamlandıktan sonra sipariş sistemimize düşecektir.
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Parça</th>
+                        <th>Oran</th>
+                        <th>Tutar</th>
+                        <th>Taksit</th>
+                        <th>Toplam</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var installment in Model.Payments.SelectMany(s => s.Installments).Where(w => w.NumberOf <= Model.MaxInstallment || Model.MaxInstallment == 0))
+                    {
+                        var payment = Model.Payments.FirstOrDefault(f => f.Installments.Any(a => a.PaymentId == installment.PaymentId));
+                        decimal paymentfee = (Model.GrandTotal * (decimal)(payment.CommissionRate / 100));
+                        paymentfee += payment.ProcessFee;
+                        <tr class="installment-row hidden" data-rel="@installment.PaymentId">
+                            <td>
+                                <input type="radio" name="installment" value="@installment.Id" />
+                            </td>
+                            <td>@installment.NumberOf Taksit</td>
+                            <td>@string.Format("{0:F2}", installment.Rate)</td>
+                            <td>@string.Format("{0:F2}", paymentfee + (Model.GrandTotal * (decimal)(installment.Rate / 100)))</td>
+                            <td>@string.Format("{0:F2}", (paymentfee + Model.GrandTotal + (Model.GrandTotal * (decimal)(installment.Rate / 100))) / installment.NumberOf)</td>
+                            <td>@string.Format("{0:F2}", paymentfee + Model.GrandTotal + (Model.GrandTotal * (decimal)(installment.Rate / 100)))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-lg btn-success pull-right">
+            <i class="fa fa-check-circle"></i> Siparişi Tamamla
+        </button>
+    </div>
+</div>
+}
+
+@section Scripts{
+<script type="text/javascript">
+    
+    $(".paymentType").click(function () {
+        var type = $(this).val();
+        var method = $(this).attr("data-method");
+        if (method == 1 && !$(".installment-holder").hasClass("hidden")) {
+            $(".installment-holder").addClass("hidden");
+        }
+        else if (method == 2) {
+            $(".installment-holder").removeClass("hidden");
+        }
+        $('input[name="installment"]:checked').removeAttr("checked");
+        $(".installment-row:not(.hidden)").addClass("hidden");
+        $('.installment-row[data-rel="' + type + '"]').removeClass("hidden");
+    });
+</script>
+}

@@ -1,0 +1,31 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.ProductTaxEditViewModel
+
+@{
+    ViewBag.Title = "Vergi Oranları";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Vergi Oranı Bilgileri";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="#">Tanımlar</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        @Html.ActionLink("Vergi Oranları", "Index")
+    </li>
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.Caption)
+        @Html.EditorFor(model => model.Rate)
+        @Html.EditorFor(model => model.Status)
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}

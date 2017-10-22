@@ -1,0 +1,39 @@
+﻿@model SmartBazaar.Web.Models.Internal.ErrorModel
+
+@{
+    ViewBag.Title = "Bir Hata Oluştu!";
+}
+
+<div class="page-content">
+    <h3 class="page-title">
+        @ViewBag.Title
+    </h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/Admin/Manage">Home</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 page-500">
+            <div class=" number">
+                500
+            </div>
+            <div class=" details">
+                <h3>@Model.Error.Message</h3>
+                <p>
+                    @Html.Raw(Model.Error.StackTrace.Replace(Environment.NewLine, "<br /><br />"))<br /><br />
+                    <a href="@Model.ReturnPage">&lt;&lt; Geri Dön</a>
+                    <br />
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section css {
+    <link href="~/assets/admin/pages/css/error.css" rel="stylesheet" type="text/css" />
+}

@@ -1,0 +1,32 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.AdminRememberViewModel
+
+@{
+    ViewBag.Title = "Remember";
+    Layout = "~/Areas/Admin/Views/Shared/_LoginLayout.cshtml";
+}
+
+    <div class="logo">
+        <a href="#">
+            <img src="../../assets/admin/layout/img/logo-big.png" alt="" />
+        </a>
+    </div>
+    <div class="content">
+
+    @using (Html.BeginForm("Remember", "AdminManager", FormMethod.Post, new { @class = "login-form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h3>Şifrenizi mi Unuttunuz ?</h3>
+            <p>
+                E-Posta adresinizi girerek şifreinizi yenileyebilirsiniz.
+            </p>
+            <div class="form-group">
+                @Html.TextBoxFor(modelItem => Model.Email, new { @class="form-control placeholder-no-fix", type="text", autocomplete="off", placeholder="E-Posta"  })
+                @Html.ValidationMessageFor(modelItem => Model.Email, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-actions">
+                <button type="button" id="back-btn" class="btn btn-default" onclick="location.href='@Url.Action("Login")'">Geri</button>
+                <button type="submit" class="btn btn-success uppercase pull-right">Gönder</button>
+            </div>
+    }
+
+    </div>

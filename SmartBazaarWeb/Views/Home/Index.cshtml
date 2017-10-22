@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "E-Ticaret";
+}
+
+@Html.Action("Slider", "Home")
+@Html.Action("Featured", "Product", new { category = 1 })
+@Html.Action("NewProducts", "Product")
+
+@section css {
+    @Styles.Render("~/plugins/touchspin-css")
+}
+
+@section scripts {
+@Scripts.Render("~/plugins/touchspin-js")
+<script type="text/javascript">
+        $(".spinner").TouchSpin({
+            min: 1,
+            max: 999,
+            verticalbuttons: true,
+            verticalupclass: 'fa fa-plus',
+            verticaldownclass: 'fa fa-minus'
+        });
+</script>
+}

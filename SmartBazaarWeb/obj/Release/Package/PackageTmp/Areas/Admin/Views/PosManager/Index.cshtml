@@ -1,0 +1,43 @@
+﻿@model IEnumerable<SmartBazaar.Web.Areas.Admin.Models.PosSettingsListViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/ListLayout.cshtml";
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Pos Ayarları", "Index")
+    </li>
+}
+@section Filters {
+    <div class="form-group col-sm-9">
+        <label class="control-label col-md-3 col-sm-4">@Html.DisplayNameFor(model => model.Status)</label>
+        <div class="col-md-9 col-sm-8">
+            @Html.DropDownList("Status", null, new { @class = "form-control" })
+        </div>
+    </div>
+}
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th style="width: 160px;">
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th style="width: 160px;"></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            <a href="@Url.Action("Edit", new { id = item.Id })" class="label label-primary">Düzenle</a>
+        </td>
+    </tr>
+}

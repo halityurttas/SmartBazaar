@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContactModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Phone1Title>İş yeri</Phone1Title>
+  <Phone1>444 4 444</Phone1>
+  <Phone2>0 212 123 45 67</Phone2>
+  <Email1Title>İletişim</Email1Title>
+  <Email1>info@site.com</Email1>
+  <GMapData>map</GMapData>
+</ContactModel>

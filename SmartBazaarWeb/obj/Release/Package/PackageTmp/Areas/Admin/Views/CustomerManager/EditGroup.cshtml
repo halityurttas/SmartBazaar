@@ -1,0 +1,31 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.CustomerGroupEditViewModel
+
+@{
+    ViewBag.Title = "Müşteri Grupları";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Müşteri Grup Bilgileri";
+}
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Müşteriler", "Index")
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        @Html.ActionLink("Müşteri Grupları", "Groups")
+    </li>
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.Caption)
+        @Html.EditorFor(model => model.PriceIndex)
+        @Html.EditorFor(model => model.Status)
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}

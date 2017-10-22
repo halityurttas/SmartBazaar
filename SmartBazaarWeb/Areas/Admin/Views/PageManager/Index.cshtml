@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SmartBazaar.Web.Areas.Admin.Models.PagesListViewModel>
+
+@{
+    ViewBag.Title = "Sayfalar";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/ListLayout.cshtml";
+    ViewBag.CreateUrl = @Url.Action("Create");
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Sayfalar", "Index")
+    </li>
+}
+@section Filters {
+    <div class="form-group col-sm-9">
+        <label class="control-label col-md-3 col-sm-4">Durum</label>
+        <div class="col-md-9 col-sm-8">
+            @Html.DropDownList("Status", null, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+<tr>
+    <th>@Html.DisplayNameFor(model => model.Title)</th>
+    <th style="width: 80px;">@Html.DisplayNameFor(model => model.Status)</th>
+    <th style="width: 120px;"></th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@Html.DisplayFor(model => item.Title)</td>
+        <td>@Html.DisplayFor(model => item.Status)</td>
+        <td>
+            @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }, new { @class = "label label-primary" })
+            @if (!item.IsFixed)
+            {
+                @Html.ActionLink("Sil", "Delete", new { id = item.Id }, new { @class = "label label-danger", onclick = "return confirm('Bu sayfa silinsin mi?')" })
+            }
+        </td>
+    </tr>
+}

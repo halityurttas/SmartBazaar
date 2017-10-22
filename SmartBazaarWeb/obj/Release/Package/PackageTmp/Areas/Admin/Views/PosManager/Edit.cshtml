@@ -1,0 +1,48 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.PosSettingsDetailViewModel
+
+@{
+    ViewBag.Title = "Düzenle";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Pos Bilgileri";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Pos Ayarları</a>
+    </li>
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Caption)
+    <div class="form-horizontal">
+
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        <div class="form-group">
+            <label class="control-label col-sm-3 col-md-3 col-lg-2">Pos Tanımı</label>
+            <div class="col-md-8 col-sm-8">
+                <span class="form-control-static">@Html.DisplayFor(model => model.Caption)</span>
+            </div>
+        </div>
+        
+        @Html.EditorFor(model => model.Status)
+
+        @for (int i = 0; i < Model.KPList.Count; i++)
+        {
+            @Html.HiddenFor(model => Model.KPList[i].Key)
+            <div class="form-group">
+                <label class="control-label col-sm-3 col-md-3 col-lg-2">@Html.DisplayFor(model => Model.KPList[i].Key)</label>
+                <div class="col-md-8 col-sm-8">
+                    @Html.TextBoxFor(model => Model.KPList[i].Value, new { @class = "form-control" })
+                </div>
+            </div>
+        }
+
+        @Html.Partial("EditorTemplates/Submit")
+
+    </div>
+}
+

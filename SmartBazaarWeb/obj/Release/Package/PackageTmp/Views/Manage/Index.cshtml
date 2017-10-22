@@ -1,0 +1,15 @@
+﻿@model SmartBazaar.Web.Models.Ident.IndexViewModel
+@{
+    ViewBag.Title = "Kullanıcı Yönetimi";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>İşlemler</h4>
+    <hr />
+    <div>@Html.ActionLink("Şifreni değiş", "ChangePassword")</div>
+    <div>@Html.ActionLink("Adres bilgilerini güncelle", "Address")</div>
+    <div>@Html.ActionLink("Siparişlerim", "Index", "Order")</div>
+</div>

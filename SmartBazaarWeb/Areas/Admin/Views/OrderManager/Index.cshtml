@@ -1,0 +1,65 @@
+﻿@model IEnumerable<SmartBazaar.Web.Areas.Admin.Models.OrderHeadsListViewModel>
+
+@{
+    ViewBag.Title = "Siparişler";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/ListLayout.cshtml";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Siparişler</a>
+    </li>
+}
+@section Filters {
+    <div class="form-group col-sm-9">
+        <label class="control-label col-md-1 col-sm-2">Durum</label>
+        <div class="col-md-3 col-sm-2">
+            @Html.DropDownList("Status", null, "Tümü", new { @class = "form-control" })
+        </div>
+        <label class="control-label col-md-1 col-sm-2">Baş.Tarih</label>
+        <div class="col-md-3 col-sm-2">
+            @Html.TextBox("Start", null, new { @class = "form-control datepicker" })
+        </div>
+        <label class="control-label col-md-1 col-sm-2">Bit.Tarih</label>
+        <div class="col-md-3 col-sm-2">
+            @Html.TextBox("End", null, new { @class = "form-control datepicker" })
+        </div>
+    </div>
+}
+
+<tr>
+    <th>@Html.DisplayNameFor(m => m.CustomerName)</th>
+    <th style="width: 160px;">@Html.DisplayNameFor(m => m.OrderDate)</th>
+    <th style="width: 120px;">@Html.DisplayNameFor(m => m.OrderTotal)</th>
+    <th style="width: 80px;">@Html.DisplayNameFor(m => m.Status)</th>
+    <th style="width: 40px; text-align: center;"></th>
+</tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.CustomerName</td>
+        <td>@string.Format("{0:dd.MM.yyyy HH:mm}", item.OrderDate)</td>
+        <td>@string.Format("{0:F2} TL", item.OrderTotal)</td>
+        <td>
+            <label class="label @(SmartBazaar.Web.Models.Common.OrderHeadsListProvider.GetStatusCss()[item.Status])">@item.StatusTitle</label>
+        </td>
+        <td>
+            <a href="@Url.Action("Detail", new { id = item.Id})">
+                <i class="fa fa-pencil-square-o"></i>
+            </a>
+        </td>
+    </tr>
+}
+
+@section css {
+    @Styles.Render("~/plugins/datepicker-css")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/datepicker-js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".datepicker").datepicker({ language: 'tr' });
+        });
+    </script>
+}

@@ -1,0 +1,45 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.AdminLoginViewModel
+
+@{
+    ViewBag.Title = "Giriş";
+    Layout = "~/Areas/Admin/Views/Shared/_LoginLayout.cshtml";
+}
+
+    <div class="logo">
+        <a href="#">
+            <img src="../../assets/admin/layout/img/logo-big.png" alt="" />
+        </a>
+    </div>
+    <div class="content">
+        @using (Html.BeginForm("Login", "AdminManager", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login-form" }))
+        {
+            @Html.AntiForgeryToken()
+            <h3 class="form-title">Yönetici Giriş</h3>
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                <span>
+                    Kullanıcı Adı ve Parolanızı Girin.
+                </span>
+            </div>
+            <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <label class="control-label visible-ie8 visible-ie9">Kullanıcı Adı</label>
+                @Html.TextBoxFor(modelItem => Model.UserName, new { @class = "form-control form-control-solid placeholder-no-fix", autocomplete = "off", placeholder = "Kullanıcı Adı" })
+                @Html.ValidationMessageFor(modelItem => Model.UserName, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">Şifre</label>
+                @Html.TextBoxFor(modelItem => Model.Password, new { @class = "form-control form-control-solid placeholder-no-fix", autocomplete = "off", placeholder = "Şifre", type = "password" })
+                @Html.ValidationMessageFor(modelItem => Model.Password, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success uppercase">Giriş</button>
+                
+                <a href="@Url.Action("Remember")" class="forget-password">Şifrenizi mi Unuttun?</a>
+            </div>
+            <div class="login-options">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        }
+        
+    </div>  

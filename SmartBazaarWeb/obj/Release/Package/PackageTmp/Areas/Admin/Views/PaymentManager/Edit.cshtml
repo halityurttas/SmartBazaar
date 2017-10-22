@@ -1,0 +1,134 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.PaymentTypesEditViewModel
+@using Newtonsoft.Json
+
+@{
+    ViewBag.Title = "Ödeme Yöntemi";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Yeni Ödeme Yöntemi";
+}
+
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Ödeme Yöntemleri", "Index")
+    </li>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal">
+
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.Caption)
+        @Html.EditorFor(model => model.Method)
+        @Html.EditorFor(model => model.CommissionRate)
+        @Html.EditorFor(model => model.ProcessFee)
+        @Html.EditorFor(model => model.PosType)
+        @Html.EditorFor(model => model.Status)
+        @Html.EditorFor(model => model.Description)
+
+        <div id="InstallmentPart" data-bind="visible: isVisible">
+            <h4>Taksitler</h4>
+            <hr />
+
+            <div class="form-group">
+                <div class="col-sm-5 text-center"><div class="form-control"><strong>Taksit Sayısı</strong></div></div>
+                <div class="col-sm-5 text-center"><div class="form-control"><strong>Oran</strong></div></div>
+            </div>
+
+            <!-- ko foreach: installments-->
+            <div class="form-group">
+                <input type="hidden" data-bind="value: Id, attr: { name: 'PaymentInstallments[' + $index() + '].Id'}" />
+                <input type="hidden" data-bind="value: PaymentId, attr: { name: 'PaymentInstallments[' + $index() + '].PaymentId'}" />
+                <input type="hidden" data-bind="value: NumberOf, attr: { name: 'PaymentInstallments[' + $index() + '].NumberOf'}" />
+                <input type="hidden" data-bind="value: Rate.toString().replace('.',','), attr: { name: 'PaymentInstallments[' + $index() + '].Rate' }" />
+                <div class="col-sm-5 text-center"><div class="form-control" data-bind="text: NumberOf">Taksit Sayısı</div></div>
+                <div class="col-sm-5 text-center"><div class="form-control" data-bind="text: Rate">Oran</div></div>
+                <div class="col-sm-2">
+                    <button type="button" data-bind="click: function () { remove($index()); }" class="btn btn-circle btn-danger">Sil</button>
+                </div>
+            </div>
+            <!-- /ko-->
+
+            <div class="form-group">
+                <div class="col-sm-5">
+                    <input data-bind="value: numberOf" class="form-control" placeholder="Taksit Sayısı" />
+                </div>
+                <div class="col-sm-5">
+                    <input data-bind="value: rate" class="form-control" placeholder="Oran" />
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" data-bind="click: function () { add(); }" class="btn btn-circle btn-primary">Ekle</button>
+                </div>
+            </div>
+        </div>
+
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}
+
+@section css {
+    @Styles.Render("~/plugins/summernote-css")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/summernote-js")
+    @Scripts.Render("~/bundles/knockout")
+    <script type="text/javascript">
+        var appInstallments = function () {
+            var self = this;
+
+            self.installments = ko.observableArray(@Html.Raw(JsonConvert.SerializeObject(Model.PaymentInstallments)));
+            self.isVisible = ko.observable(false);
+            self.numberOf = ko.observable("");
+            self.rate = ko.observable("");
+
+            self.add = function () {
+                installments.push({
+                    Id: 0,
+                    PaymentId: 0,
+                    NumberOf: self.numberOf(),
+                    Rate: self.rate()
+                });
+
+                self.numberOf("");
+                self.rate("");
+            }
+
+            self.remove = function (idx) {
+                installments.splice(idx, 1);
+            }
+
+            self.checkVisible = function () {
+                if ($("#Method").val() == "2") {
+                    self.isVisible(true);
+                } else {
+                    self.isVisible(false);
+                }
+            }
+
+            self.app = {
+                construct: function () {
+                    self.checkVisible();
+                    $("#Method").change(function () {
+                        self.checkVisible();
+                    });
+                }
+            }
+
+            return {
+                init: function () {
+                    ko.applyBindings(self, document.getElementById("InstallmentPart"));
+                    self.app.construct();
+                }
+            }
+
+        }();
+
+        $(document).ready(function () {
+            appInstallments.init();
+            $(".summernote").summernote({ height: 300 });
+        });
+    </script>
+}

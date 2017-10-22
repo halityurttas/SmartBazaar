@@ -1,0 +1,33 @@
+﻿<div class="dropdown" id="basketbox">
+    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="basketMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="fa fa-shopping-cart"></span> <span data-bind="text: BasketCount"></span> Ürün</button>
+    <ul class="dropdown-menu dropdown-cart" role="menu">
+        <!-- ko foreach: BasketDetail -->
+        <li>
+            <span class="item">
+                <div class="media">
+                    <div class="media-left" style="min-width: 32px;">
+                        <img class="media-object" data-bind="attr: { src: '/WebFiles/' + ProductImage + '.ashx?width=32&height=32&mode=crop' }" />
+                    </div>
+                    <div class="media-right">
+                        <div style="font-size: 9pt;"><strong><span data-bind="text: ProductName"></span></strong></div>
+                        <div style="font-size: 7pt;"><strong>Miktar:</strong> <span data-bind="text: Quantity"></span> <strong>Tutar:</strong> <span data-bind="text: Number(Total).toFixed(2)"></span> TL</div>
+                    </div>
+                </div>
+            </span>
+        </li>
+        <!-- /ko -->
+        <li role="separator" class="divider"></li>
+        <li>
+            <span class="item text-right">
+                <div class="pull-left">
+                    <a href="@Url.Action("Index", "Basket")" class="btn btn-sm btn-success">Sepete Git</a>
+                </div>
+                <div class="pull-right" style="margin-top: 7px;">
+                    <strong>
+                        Toplam: <span data-bind="text: Number(BasketTotal()).toFixed(2)"></span> TL
+                    </strong>
+                </div>
+            </span>
+        </li>
+    </ul>
+</div>

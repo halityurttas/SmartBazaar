@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[HtmlBlocks]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Title] NVARCHAR(150) NOT NULL, 
+    [Detail] NTEXT NULL, 
+    [Status] SMALLINT NOT NULL DEFAULT 1, 
+    [Location] INT NOT NULL DEFAULT 0
+)

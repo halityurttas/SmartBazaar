@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SmartBazaar.Web.Areas.Admin.Models.CatalogCommentsListViewModel>
+
+@{
+    ViewBag.Title = "Yorumlar";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/ListLayout.cshtml";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Ürünler</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        @Html.ActionLink("Markalar", "Brands")
+    </li>
+}
+@section Filters {
+    <div class="form-group col-sm-9">
+        <label class="control-label col-md-3 col-sm-4">@Html.DisplayNameFor(model => model.Status)</label>
+        <div class="col-md-9 col-sm-8">
+            @Html.DropDownList("Status", null, new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+<tr>
+    <th>@Html.DisplayNameFor(model => model.UserTitle)</th>
+    <th>@Html.DisplayNameFor(model => model.ProductTitle)</th>
+    <th style="width: 200px;">@Html.DisplayNameFor(model => model.Created)</th>
+    <th style="width: 80px;">@Html.DisplayNameFor(model => model.Rating)</th>
+    <th style="width: 120px;">@Html.DisplayNameFor(model => model.Status)</th>
+    <th style="width: 140px;"></th>
+</tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@Html.DisplayFor(model => item.UserTitle)</td>
+        <td>@Html.DisplayFor(model => item.ProductTitle)</td>
+        <td>@Html.DisplayFor(model => item.Created)</td>
+        <td>@Html.DisplayFor(model => item.Rating)</td>
+        <td>@Html.DisplayFor(model => item.Status)</td>
+        <td>
+            @Html.ActionLink("Detay", "CommentDetail", new { id = item.Id }, new { @class = "label label-primary" })
+        </td>
+    </tr>
+}

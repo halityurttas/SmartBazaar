@@ -1,0 +1,64 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.CatalogCommentsDetailViewModel
+
+@{
+    ViewBag.Title = "Yorum Detayı";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Marka Bilgileri";
+}
+
+@section Breadcumbs {
+    <li>
+        <a href="@Url.Action("Index")">Ürünler</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        @Html.ActionLink("Yorumlar", "Comments")
+    </li>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-3 col-md-3 col-lg-2">@Html.DisplayNameFor(model => model.UserTitle)</label>
+            <div class="col-sm-9 col-md-9 col-lg-2">
+                <span class="form-control-static">@Model.UserTitle</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3 col-md-3 col-lg-2">@Html.DisplayNameFor(model => model.ProductTitle)</label>
+            <div class="col-sm-9 col-md-9 col-lg-2">
+                <span class="form-control-static"><a href="@Url.Action("Edit", new { id = Model.ProductId })">@Model.ProductTitle</a></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3 col-md-3 col-lg-2">@Html.DisplayNameFor(model => model.Created)</label>
+            <div class="col-sm-9 col-md-9 col-lg-2">
+                <span class="form-control-static">@Model.Created</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3 col-md-3 col-lg-2">@Html.DisplayNameFor(model => model.Rating)</label>
+            <div class="col-sm-9 col-md-9 col-lg-2">
+                <span class="form-control-static">@Model.Rating</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <span class="form-control-static">@Model.Description</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-2 col-sm-9 col-md-9 col-lg-10">
+                @if (Model.Status == 0)
+                {
+                    <input type="submit" name="op" value="Onayla" class="btn btn-success" />
+                }
+                <input type="submit" name="op" value="Sil" class="btn btn-danger" />
+            </div>
+        </div>
+    </div>
+}

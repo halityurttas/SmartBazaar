@@ -1,0 +1,238 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var summary = ViewBag.DashboardSummary as SmartBazaar.Web.Areas.Admin.Models.DashboardSummaryViewModel;
+}
+
+<div class="page-content" style="min-height: 940px;">
+    <h3 class="page-title">
+        Dashboard <small>dashboard &amp; istatistik</small>
+    </h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="@Url.Action("Index")">Dashboard</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat blue-madison">
+                <div class="visual">
+                    <i class="fa fa-money"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        @string.Format("{0:F2}", summary.MonthlyPayment) TL
+                    </div>
+                    <div class="desc">
+                        Bu Ay Satış
+                    </div>
+                </div>
+                <a class="more" href="@Url.Action("Index", "OrderManager")">
+                    Daha fazlası <i class="m-icon-swapright m-icon-white"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat red-intense">
+                <div class="visual">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        @summary.MonthlyOrder
+                    </div>
+                    <div class="desc">
+                        Bu Ay Sipariş
+                    </div>
+                </div>
+                <a class="more" href="@Url.Action("Index", "OrderManager")">
+                    Daha fazlası <i class="m-icon-swapright m-icon-white"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat purple-plum">
+                <div class="visual">
+                    <i class="fa fa-money"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        @string.Format("{0:F2}", summary.DailyPayment) TL
+                    </div>
+                    <div class="desc">
+                        Bu Gün Satış
+                    </div>
+                </div>
+                <a class="more" href="@Url.Action("Index", "OrderManager")">
+                    Daha fazlası <i class="m-icon-swapright m-icon-white"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat green-haze">
+                <div class="visual">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        @summary.DailyOrder
+                    </div>
+                    <div class="desc">
+                        Bu Gün Sipariş
+                    </div>
+                </div>
+                <a class="more" href="@Url.Action("Index", "OrderManager")">
+                    Daha fazlası <i class="m-icon-swapright m-icon-white"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet solid bordered grey-cararra">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-bar-chart-o"></i>30 Günlük Satış Tutarları
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div id="site_statistics_monthly_sums" class="chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="portlet solid bordered grey-cararra">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-bar-chart-o"></i>30 Günlük Sipariş Miktarları
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div id="site_statistics_monthly_cnts" class="chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- charts-js -->
+    @Scripts.Render("~/metronic/charts-js")
+
+    <script type="text/javascript">
+        var sums = @Html.Raw(ViewBag.Sums);
+        var cnts = @Html.Raw(ViewBag.Cnts);
+        $(document).ready(function() {
+           window.plor = $.plot($("#site_statistics_monthly_sums"), [{
+                data: sums,
+                label: "Satışlar",
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0
+            }], {
+                series: {
+                    lines: {
+                        show: true,
+                        lineWidth: 2,
+                        fill: true,
+                        fillColor: {
+                            colors: [{
+                                opacity: 0.05
+                            }, {
+                                opacity: 0.01
+                            }]
+                        }
+                    },
+                    points: {
+                        show: true,
+                        radius: 3,
+                        lineWidth: 1
+                    },
+                    shadowSize: 2
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true,
+                    tickColor: "#eee",
+                    borderColor: "#eee",
+                    borderWidth: 1
+                },
+                colors: ["#d12610", "#37b7f3", "#52e136"],
+                xaxis: {
+                    mode: "time",
+                    timeformat: "%d.%b",
+                    tickColor: "#eee",
+                    tickSize: [1, "day"],
+                    monthNames: ["Ock", "Sub", "Mar", "Nis", "May", "Haz", "Tem", "Ags", "Eyl", "Ekm", "Kas", "Arl"]
+                },
+                yaxis: {
+                    ticks: 11,
+                    tickDecimals: 0,
+                    tickColor: "#eee",
+                }
+            }
+            
+            );
+
+            $.plot($("#site_statistics_monthly_cnts"), [{
+                data: cnts,
+                label: "Siparişler",
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0
+            }], {
+                series: {
+                    lines: {
+                        show: true,
+                        lineWidth: 2,
+                        fill: true,
+                        fillColor: {
+                            colors: [{
+                                opacity: 0.05
+                            }, {
+                                opacity: 0.01
+                            }]
+                        }
+                    },
+                    points: {
+                        show: true,
+                        radius: 3,
+                        lineWidth: 1
+                    },
+                    shadowSize: 2
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true,
+                    tickColor: "#eee",
+                    borderColor: "#eee",
+                    borderWidth: 1
+                },
+                colors: ["#37b7f3", "#d12610", "#52e136"],
+                xaxis: {
+                    mode: "time",
+                    timeformat: "%d.%b",
+                    tickColor: "#eee",
+                    tickSize: [1, "day"],
+                    monthNames: ["Ock", "Sub", "Mar", "Nis", "May", "Haz", "Tem", "Ags", "Eyl", "Ekm", "Kas", "Arl"]
+                },
+                yaxis: {
+                    ticks: 11,
+                    tickDecimals: 0,
+                    tickColor: "#eee",
+                }
+            }
+            
+            );
+        });
+    </script>
+}

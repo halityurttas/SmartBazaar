@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "Toplu Ürün İşlemleri";
+}
+
+<div class="page-content">
+    <h3 class="page-title">
+        Toplu Ürün İşlemleri
+    </h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/Admin">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index")">Ürünler</a>
+            </li>
+        </ul>
+    </div>
+    @using (Html.BeginForm())
+    {
+        <div class="note note-warning">
+            <h4 class="block">Dikkat! Filtreleme Hakkında</h4>
+            <p>
+                Toplu güncelleme yapma işleminde birden fazla ürün bilgisi güncelleneceği için güncelleyeceğiniz ürünün kriterlerini doldurmanız gerekmektedir. İhtiyacınıza karşılık gelen alanları doldurup, ihtiyaç duymadığınız alanları boş bırakabilirsiniz. Ürün adı alanı ürün adı içinde geçen metni arar (Örn. DDR 533 yazdığınızda isminde DDR 533 geçen ürünleri bulur, ayrı ayrı geçenleri bulmaz yazıldığı gibi arar!).
+            </p>
+        </div>
+    <div class="portlet light bordered">
+        <div class="portlet-title tabbable-line">
+            <div class="caption bold font-blue-sharp">
+                <i class="fa fa-bars font-blue-sharp"></i>
+                <span class="caption-subject uppercase">
+                    Filtreler
+                </span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Ürün Adı</label>
+                    <div class="col-sm-8 col-md-8">
+                        <input type="text" name="title" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Durum</label>
+                    <div class="col-md-4 col-sm-6">
+                        @Html.DropDownList("status", new List<SelectListItem> { new SelectListItem { Text = "Tümü", Value = ""}, new SelectListItem { Text = "Aktif", Value = "1" }, new SelectListItem { Text = "Pasif", Value = "0" } }, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Kategori</label>
+                    <div class="col-sm-8 col-md-8">
+                        @Html.DropDownList("category", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Marka</label>
+                    <div class="col-sm-8 col-md-8">
+                        @Html.DropDownList("brand", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Min.Stok</label>
+                    <div class="col-md-4 col-sm-6">
+                        @Html.TextBox("minstock", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Max.Stok</label>
+                    <div class="col-md-4 col-sm-6">
+                        @Html.TextBox("maxstock", null, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="note note-warning">
+        <h4 class="block">Dikkat! Değer Verme Hakkında</h4>
+        <p>
+            Toplu güncelleme yapma işleminde ürünlerin fiyat ve stok bilgilerini güncelleyebilirsiniz. Fiyat alanlarından istediklerinizi doldurabilirsiniz. Vereceğiniz değer mevcut fiyatın artış oranı olacaktır. Örneğin 20 yazdığınız durumda ürün fiyatları %20 oranında artacaktır. Fiyatları indirmek için başına - işareti koyabilirsiniz. Stok alanına gireceğiniz değer ürünün stoğunu direk değiştirir. Yani mevcut stoğa eklenmez!
+        </p>
+    </div>
+    <div class="portlet light bordered">
+        <div class="portlet-title tabbable-line">
+            <div class="caption bold font-blue-sharp">
+                <i class="fa fa-bars font-blue-sharp"></i>
+                <span class="caption-subject uppercase">
+                    Değerler
+                </span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Fiyat1 Artış Oranı</label>
+                    <div class="col-md-4 col-sm-6">
+                        @Html.TextBox("price1rate", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Fiyat2 Artış Oranı</label>
+                    <div class="col-md-4 col-sm-6">
+                        @Html.TextBox("price2rate", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Fiyat3 Artış Oranı</label>
+                    <div class="col-md-4 col-sm-6">
+                        @Html.TextBox("price3rate", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Fiyat4 Artış Oranı</label>
+                    <div class="col-md-4 col-sm-6">
+                        @Html.TextBox("price4rate", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Fiyat5 Artış Oranı</label>
+                    <div class="col-md-4 col-sm-6">
+                        @Html.TextBox("price5rate", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3 col-lg-2">Yeni Stok Mik.</label>
+                    <div class="col-md-4 col-sm-6">
+                        @Html.TextBox("stock", null, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="note note-success">
+            <p>
+                <button type="submit" class="btn btn-success">
+                    <i class="fa fa-save"></i>
+                    Güncelle
+                </button>
+            </p>
+        </div>
+    }
+</div>

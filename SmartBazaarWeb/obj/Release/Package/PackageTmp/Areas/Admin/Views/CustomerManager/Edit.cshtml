@@ -1,0 +1,54 @@
+﻿@model SmartBazaar.Web.Areas.Admin.Models.CustomerEntityEditViewModel
+
+@{
+    ViewBag.Title = "Müşteriler";
+    Layout = "~/Areas/Admin/Views/Shared/LayoutTemplates/EditorLayout.cshtml";
+    ViewBag.Subtitle = "Müşteri Bilgileri";
+}
+@section Breadcumbs {
+    <li>
+        @Html.ActionLink("Müşteriler", "Index")
+    </li>
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.Partial("CustomTemplates/ValidationSummary", ViewData.ModelState)
+        @Html.EditorFor(model => model.Caption)
+        @Html.EditorFor(model => model.GroupId)
+        @Html.EditorFor(model => model.TaxNr)
+        @Html.EditorFor(model => model.TaxOffice)
+        @Html.EditorFor(model => model.ContactPhone)
+        @Html.EditorFor(model => model.CustomerType)
+        @Html.EditorFor(model => model.Status)
+
+        <h4>Bireysel Bilgiler</h4>
+        <hr />
+
+        @Html.EditorFor(model => model.BirthDate)
+        @Html.EditorFor(model => model.Gender)
+
+        <h4>Kurumsal Bilgiler</h4>
+        <hr />
+
+        @Html.EditorFor(model => model.Company)
+
+        @Html.Partial("EditorTemplates/Submit")
+    </div>
+}
+
+@section css {
+    @Styles.Render("~/plugins/datepicker-css")
+}
+@section scripts {
+    @Scripts.Render("~/plugins/datepicker-js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".datepicker").datepicker({language: 'tr'});
+        });
+    </script>
+}

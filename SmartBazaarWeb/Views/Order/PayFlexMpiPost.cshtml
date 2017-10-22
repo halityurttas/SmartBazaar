@@ -1,0 +1,23 @@
+﻿@model SmartBazaar.Web.Components.Payment.PayFlex.Models.MPIStatusResponse
+
+@{
+    ViewBag.Title = "PayFlexMpiPost";
+}
+
+<form method="post" id="transactionform" action="@Model.VERes.ACSUrl">
+    <input type="hidden" name="PAReq" value="@Model.VERes.PAReq" />
+    <input type="hidden" name="TermUrl" value="@Model.VERes.TermUrl" />
+    <input type="hidden" name="MD" value="@Model.VERes.MD" />
+    <!-- <noscript> -->
+    <span>Siparişinizin tamamlanabilmesi için 3D ödeme aşamasına elle geçmeniz gerekiyor. Lütfen güvenliğiniz için Ödeme Yap tıklayarak devam edin.</span>
+    <button type="submit">Ödeme Yap</button>
+    <!-- </noscript> -->
+</form>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#transactionform").submit();
+        });
+    </script>
+}
